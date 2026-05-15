@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+  --background: #080a12;
+  --foreground: #f8fafc;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: Inter, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "SFMono-Regular", "Roboto Mono", "JetBrains Mono", Consolas, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Inter, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+  background:
+    radial-gradient(circle at 50% -10%, rgba(167, 139, 250, 0.18), transparent 38%),
+    linear-gradient(180deg, #0b0d17 0%, #080a12 42%, #080a12 100%);
+}
+
+::selection {
+  color: #080a12;
+  background: #a78bfa;
+}
+
+input,
+button,
+select,
+textarea {
+  font: inherit;
+}
