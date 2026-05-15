@@ -9,7 +9,7 @@ from backend.services.insurance_service import predict_insurance
 from backend.services.nba_service import run_nba
 
 app = FastAPI(
-    title="Ruize Ma Portfolio Backend",
+    title="Ruize Lab Backend",
     version="1.0.0",
     description=(
         "Backend wrappers around Ruize Ma's original NBA agent, biomedical "
@@ -20,10 +20,18 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        # Local frontend development
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:3001",
         "http://127.0.0.1:3001",
+
+        # Cloudflare Pages frontend
+        "https://ruizema-portfolio.pages.dev",
+
+        # Custom domain frontend
+        "https://ruizelab.com",
+        "https://www.ruizelab.com",
     ],
     allow_credentials=True,
     allow_methods=["*"],
