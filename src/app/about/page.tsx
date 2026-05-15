@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const focusMetrics = [
   { label: "Focus", value: "AI", detail: "agent workflows and model reasoning" },
   { label: "Interface", value: "UX", detail: "dashboards for readable systems" },
-  { label: "Delivery", value: "static", detail: "Cloudflare Pages first version" },
+  { label: "Delivery", value: "fullstack", detail: "Next.js frontend + FastAPI backend" },
 ];
 
 export default function AboutPage() {
@@ -33,9 +33,9 @@ export default function AboutPage() {
             happens in the middle, what comes out, and where the limits are.
           </p>
           <p className="mt-5 text-base leading-8 text-zinc-400">
-            The first version is intentionally static and deployable. It uses local
-            TypeScript data and browser interactions to communicate the architecture
-            before connecting any real backend or live model service.
+            This version uses a Next.js frontend with a FastAPI backend wrapper, so
+            the interface can preserve the original project logic while making the
+            system traces easier to inspect.
           </p>
         </div>
 

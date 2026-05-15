@@ -7,7 +7,7 @@ import { projectStats, projects } from "@/data/projects";
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "Featured AI systems projects by Ruize Ma with static demos and inspectable model traces.",
+    "Featured AI systems projects by Ruize Ma with backend-wrapped original project logic and inspectable model traces.",
 };
 
 export default function ProjectsPage() {
@@ -21,9 +21,9 @@ export default function ProjectsPage() {
           AI systems, reasoning traces, and model dashboards.
         </h1>
         <p className="mt-5 max-w-3xl text-base leading-8 text-zinc-400">
-          Three portfolio projects share one product-style interface: static inputs,
-          visible pipeline steps, intermediate results, final outputs, and clear
-          limitations.
+          Three portfolio projects share one product-style interface: real backend
+          calls, visible pipeline steps, intermediate outputs, final results, and
+          clear limitations.
         </p>
       </section>
 

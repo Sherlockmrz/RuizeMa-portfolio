@@ -29,6 +29,11 @@ const statusConfig = {
     icon: AlertTriangle,
     className: "border-violet-300/20 bg-violet-400/[0.08] text-violet-200",
   },
+  error: {
+    label: "Blocked",
+    icon: AlertTriangle,
+    className: "border-rose-300/20 bg-rose-400/[0.08] text-rose-200",
+  },
 } satisfies Record<
   PipelineStep["status"],
   { label: string; icon: typeof Check; className: string }

@@ -21,8 +21,9 @@ export default function Home() {
               Systems with inspectable demos
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-400">
-              Each project uses local TypeScript data to show inputs, reasoning steps,
-              intermediate outputs, final results, and limitations.
+              Each project calls a FastAPI wrapper that either recomputes with the
+              original code path or exposes provenance-backed original artifacts when
+              live dependencies are unavailable.
             </p>
           </div>
           <Link

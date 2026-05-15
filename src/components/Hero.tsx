@@ -28,13 +28,13 @@ export function Hero({ projects, stats }: HeroProps) {
           <div className="flex flex-wrap gap-2">
             <span className="inline-flex items-center gap-2 rounded-full border border-violet-300/20 bg-violet-400/[0.08] px-3 py-1.5 font-mono text-xs text-violet-100">
               <ShieldCheck className="size-3.5" />
-              local demos
+              original logic
             </span>
             <span className="rounded-full border border-cyan-300/20 bg-cyan-400/[0.07] px-3 py-1.5 font-mono text-xs text-cyan-100">
-              no live APIs
+              FastAPI wrapper
             </span>
             <span className="rounded-full border border-white/[0.1] bg-white/[0.04] px-3 py-1.5 font-mono text-xs text-zinc-300">
-              Cloudflare-ready
+              provenance shown
             </span>
           </div>
 
@@ -46,7 +46,8 @@ export function Hero({ projects, stats }: HeroProps) {
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-300">
             A polished portfolio for agent workflows, biomedical reasoning, and
-            predictive modeling, presented as calm product-grade system dashboards.
+            predictive modeling, presented as calm product-grade system dashboards
+            backed by the original project code and artifacts.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">

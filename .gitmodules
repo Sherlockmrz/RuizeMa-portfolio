@@ -1,0 +1,9 @@
+[submodule "original_projects/NBA-Roster-Upgrade-Agent"]
+	path = original_projects/NBA-Roster-Upgrade-Agent
+	url = https://github.com/Sherlockmrz/NBA-Roster-Upgrade-Agent.git
+[submodule "original_projects/Agentic--Biomedical-Reasoning"]
+	path = original_projects/Agentic--Biomedical-Reasoning
+	url = https://github.com/Sherlockmrz/Agentic--Biomedical-Reasoning.git
+[submodule "original_projects/Insurance-Cost-Predictor"]
+	path = original_projects/Insurance-Cost-Predictor
+	url = https://github.com/yinruide/Insurance-Cost-Predictor.git

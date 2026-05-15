@@ -24,7 +24,7 @@ export type ToolModel = {
 export type PipelineStep = {
   id: string;
   title: string;
-  status: "complete" | "review" | "warning";
+  status: "complete" | "review" | "warning" | "error";
   tool: string;
   input: string;
   output: string;
@@ -76,59 +76,59 @@ export const projects: Project[] = [
     shortTitle: "Roster Upgrade Agent",
     category: "AI Agent System",
     description:
-      "A decision-support agent that evaluates roster gaps, candidate fits, constraints, and tradeoffs for an NBA upgrade scenario.",
+      "An LLM-driven roster recommendation and scouting workflow built around team need diagnosis, player strength vectors, and fit ranking.",
     overview:
-      "This project frames front-office roster improvement as an agent workflow. The demo uses static player-like data to show how the system moves from a team need to candidate retrieval, fit scoring, constraint review, and a recommendation with caveats.",
-    role: "Designed the agent trace, evaluation rubric, candidate ranking logic, and dashboard narrative.",
+      "The backend wraps the original Colab-style NBA project. When the required NBA CSV files are available through NBA_DATA_PATH, it recomputes the original Tool A, Tool B, and Tool C pipeline. Without those CSVs, it displays the captured original notebook output for the published Warriors demo query.",
+    role: "Original project authoring and portfolio integration: exposed parsing, need diagnosis, player vectors, fit ranking, and scouting-summary outputs through a structured backend response.",
     demoKey: "nba",
-    tags: ["Agent workflow", "Sports analytics", "Constraint reasoning"],
+    tags: ["LLM parsing", "Sports analytics", "Fit ranking"],
     metrics: [
-      { label: "Trace steps", value: "5", detail: "from roster need to verify" },
-      { label: "Candidates", value: "8", detail: "static demo pool" },
-      { label: "Fit layers", value: "4", detail: "role, cost, age, risk" },
+      { label: "Original tools", value: "A-C", detail: "need, strength, ranking" },
+      { label: "Recorded pool", value: "236", detail: "eligible players in notebook" },
+      { label: "Mode", value: "CSV-gated", detail: "live with NBA_DATA_PATH" },
     ],
     tools: [
       {
-        name: "Roster Gap Analyzer",
-        type: "agent",
+        name: "LLM Parser",
+        type: "planner",
         description:
-          "Maps the input roster need into target skills, positional coverage, and risk priorities.",
-        signal: "Need vector",
+          "Converts the natural-language roster request into team, goal, top-k, recent-game window, and availability filters.",
+        signal: "query JSON",
         accent: "purple",
       },
       {
-        name: "Candidate Retriever",
-        type: "tool",
+        name: "Tool A: Team Need Diagnosis",
+        type: "analytics",
         description:
-          "Selects a small static pool of wings and guards that match the scenario constraints.",
-        signal: "8 candidates",
+          "Uses recent team statistics and league z-scores to compute a need-weight vector.",
+        signal: "need vector",
         accent: "cyan",
       },
       {
-        name: "Fit Scorer",
-        type: "model",
+        name: "Tool B: Player Strength Representation",
+        type: "features",
         description:
-          "Ranks options with weighted signals for defense, shooting, cost, role fit, and timeline.",
-        signal: "0-100 score",
+          "Builds player strength vectors from box-score features and standardized skill indicators.",
+        signal: "player vectors",
         accent: "indigo",
       },
       {
-        name: "Verification Pass",
-        type: "review",
+        name: "Tool C: Fit Ranking",
+        type: "ranker",
         description:
-          "Flags assumptions, missing live data, and places where a human decision-maker should inspect the recommendation.",
-        signal: "3 caveats",
+          "Matches team need weights against player strengths to produce top recommendations and best-match labels.",
+        signal: "fit score",
         accent: "green",
       },
     ],
     exampleInput:
-      "Golden State needs a lower-cost wing who can defend primary scorers, keep spacing above league average, and avoid a major long-term salary commitment.",
+      "Recommend top 5 players for the Warriors to improve interior defense using the last 10 games. Only include players with at least 20 games and 18 average minutes.",
     finalResult:
-      "The static demo recommends a mid-cost 3-and-D wing profile over a star trade, because the role fit is strong while cap and asset risk stay lower.",
+      "The original notebook demo recommends Anthony Davis, Rudy Gobert, O.G. Anunoby, Nikola Jokic, and Joel Embiid as the top statistical fits for the Warriors interior-defense request.",
     limitations: [
-      "Uses static TypeScript data instead of live NBA stats, contracts, or injury reports.",
-      "Trade rules and salary matching are simplified for portfolio demonstration.",
-      "Outputs are decision-support signals, not a replacement for scouting or front-office review.",
+      "The original repo does not include the required NBA CSV files; live recomputation requires NBA_DATA_PATH.",
+      "The original ranking does not include salary, age, trade feasibility, or cap constraints.",
+      "The original project notes superstar bias in the statistical ranking.",
     ],
     githubUrl: "#",
   },
@@ -138,59 +138,59 @@ export const projects: Project[] = [
     shortTitle: "Biomedical Reasoning",
     category: "Reasoning System",
     description:
-      "A transparent biomedical reasoning workflow that plans evidence needs, acts on structured findings, and verifies claims before answering.",
+      "A CURE-Bench Plan-Act-Verify system that uses a model planner, biomedical tools, curated Tool Facts, and a final answer pass.",
     overview:
-      "This system demonstrates a Plan-Act-Verify pattern for biomedical questions. The version on the site is a static trace that emphasizes traceability: what question was asked, what evidence would be needed, how intermediate claims are checked, and where the system refuses to overstate certainty.",
-    role: "Built the reasoning pattern, verification checkpoints, result formatting, and limitation language.",
+      "The backend wraps the original biomedical pipeline when OpenRouter and ToolUniverse are available. In local recorded mode, it displays an original submission CSV trace with the real plan, tool calls, Tool Facts, and final answer.",
+    role: "Portfolio integration: converted the original benchmark pipeline and submission artifacts into a readable question, plan, tool retrieval, verification, and answer display.",
     demoKey: "biomedical",
-    tags: ["Plan-Act-Verify", "Biomedical AI", "Evidence checks"],
+    tags: ["Plan-Act-Verify", "CURE-Bench", "Tool Facts"],
     metrics: [
-      { label: "Reasoning phases", value: "3", detail: "plan, act, verify" },
-      { label: "Evidence checks", value: "4", detail: "claim-level review" },
-      { label: "Safety flags", value: "3", detail: "scope and uncertainty" },
+      { label: "Published acc.", value: "0.69564", detail: "fine-tuned GPT-4.1 + tools" },
+      { label: "Passes", value: "2", detail: "plan then answer/verify" },
+      { label: "Tool families", value: "6", detail: "FDA, DailyMed, RxNav, more" },
     ],
     tools: [
       {
-        name: "Question Planner",
+        name: "GPT5Model.plan",
         type: "planner",
         description:
-          "Breaks the biomedical prompt into population, mechanism, comparator, and answer-scope needs.",
-        signal: "PICO frame",
+          "Analyzes the stem and choices, extracts keywords, selects facts needed, and proposes biomedical tools.",
+        signal: "plan JSON",
         accent: "purple",
       },
       {
-        name: "Evidence Extractor",
-        type: "tool",
+        name: "ToolAgent.collect",
+        type: "retrieval",
         description:
-          "Uses static example findings to model how structured evidence would be summarized.",
-        signal: "4 findings",
+          "Runs curated biomedical tools and records success/failure traces for evidence gathering.",
+        signal: "tool calls",
         accent: "cyan",
       },
       {
-        name: "Claim Verifier",
-        type: "verifier",
+        name: "Tool Fact Curator",
+        type: "filter",
         description:
-          "Checks whether the draft answer is supported by the intermediate evidence and uncertainty notes.",
-        signal: "claim audit",
+          "Filters, deduplicates, clips, and diversifies successful facts before the answer pass.",
+        signal: "10 facts max",
         accent: "green",
       },
       {
-        name: "Answer Composer",
-        type: "model",
+        name: "Pass-2 Answer Prompt",
+        type: "verifier",
         description:
-          "Produces a concise answer with supporting rationale, uncertainty, and non-clinical boundaries.",
-        signal: "bounded answer",
+          "Combines prior analysis, curated facts, and the full MCQ to produce one final answer letter.",
+        signal: "Final answer",
         accent: "indigo",
       },
     ],
     exampleInput:
-      "Explain why a plan-act-verify workflow can reduce unsupported conclusions when answering a biomedical mechanism question.",
+      "A pediatric generalized myasthenia gravis multiple-choice question with drug choices.",
     finalResult:
-      "The demo answer keeps claims tied to the provided evidence trace and labels uncertain areas instead of presenting a clinical recommendation.",
+      "The backend returns either a live original pipeline run or a provenance-backed recorded submission row from the original CURE-Bench outputs.",
     limitations: [
-      "Static demo data only; no live literature retrieval or clinical database access.",
-      "Not medical advice and not designed for diagnosis or treatment decisions.",
-      "Verification checks are illustrative and would need stronger evaluation before real biomedical use.",
+      "Live mode requires OpenRouter credentials and ToolUniverse dependencies.",
+      "Recorded mode is an original artifact but does not answer arbitrary new biomedical questions.",
+      "This is benchmark reasoning output, not medical advice.",
     ],
     githubUrl: "#",
   },
@@ -200,59 +200,59 @@ export const projects: Project[] = [
     shortTitle: "Cost Predictor",
     category: "Predictive Model",
     description:
-      "A client-side model dashboard for estimating annual insurance cost from demographic and lifestyle inputs with uncertainty and feature contributions.",
+      "A backend-wrapped Streamlit project that loads the original saved model artifacts and returns annual cost predictions with uncertainty and feature drivers.",
     overview:
-      "The predictor turns a familiar tabular ML task into a clean model product. The first version runs entirely in the browser with a transparent heuristic model, adjustable inputs, model selection, uncertainty ranges, and feature-level contribution cards.",
-    role: "Designed the model UI, encoded the client-side prediction logic, and added contribution and uncertainty explanations.",
+      "The backend imports the original Insurance Cost Predictor Streamlit shared module and calls make_prediction directly. It reuses the saved subgroup Random Forest regressors, smoker classifier path, quantile regression interval, and model comparison metrics.",
+    role: "Portfolio integration: replaced the Streamlit UI with a Next.js dashboard while preserving the original inference path and model artifacts.",
     demoKey: "insurance",
-    tags: ["TypeScript model", "Prediction UI", "Feature attribution"],
+    tags: ["Saved models", "Block 2 routing", "Quantile interval"],
     metrics: [
-      { label: "Inputs", value: "6", detail: "age, BMI, smoker, children, region, model" },
-      { label: "Models", value: "3", detail: "linear, ridge, boosted" },
-      { label: "Runtime", value: "0 API", detail: "browser-only demo" },
+      { label: "Inputs", value: "6", detail: "age, BMI, children, sex, region, smoker" },
+      { label: "Best model R2", value: "0.846", detail: "XGBoost comparison metric" },
+      { label: "Backend", value: "FastAPI", detail: "wraps original shared.py" },
     ],
     tools: [
       {
-        name: "Feature Encoder",
-        type: "transform",
+        name: "Block 2 Router",
+        type: "classifier",
         description:
-          "Converts numeric, boolean, and categorical fields into model-ready feature signals.",
-        signal: "6 features",
+          "Uses known smoker status directly, or estimates smoker probability for unknown status.",
+        signal: "segment",
         accent: "cyan",
       },
       {
-        name: "Cost Estimator",
+        name: "Subgroup Random Forests",
         type: "model",
         description:
-          "Applies transparent client-side coefficients and model-specific adjustments.",
+          "Loads the original smoker and non-smoker Random Forest regressor artifacts.",
         signal: "annual USD",
         accent: "purple",
       },
       {
-        name: "Uncertainty Band",
-        type: "calibrator",
+        name: "Quantile Regression",
+        type: "uncertainty",
         description:
-          "Adds a simple interval that changes by selected model family and input risk profile.",
-        signal: "low-high",
+          "Uses the original q10/q50/q90 quantile models for the 80% prediction interval.",
+        signal: "q10-q90",
         accent: "indigo",
       },
       {
-        name: "Contribution Explainer",
+        name: "Feature Impact Heuristic",
         type: "explainer",
         description:
-          "Breaks the prediction into feature contributions so the result can be inspected.",
-        signal: "feature cards",
+          "Ranks local drivers using feature importance times deviation from dataset medians.",
+        signal: "drivers",
         accent: "green",
       },
     ],
     exampleInput:
-      "Age 42, BMI 31.2, smoker, two children, southeast region, ridge-style model.",
+      "Age 35, BMI 27.5, one child, female, northeast region, unknown smoker status.",
     finalResult:
-      "The dashboard returns a predicted annual cost, uncertainty range, and the largest positive and negative feature contributions.",
+      "The backend returns the original Block 2 routed prediction, q10/q50/q90 interval, subgroup costs, smoker probability, model comparison, and feature-impact table.",
     limitations: [
-      "Heuristic client-side logic for demonstration, not a trained production model.",
-      "No personal data is stored or sent to a server.",
-      "Real pricing would require regulated actuarial workflows, larger datasets, and fairness review.",
+      "The feature-impact chart is the original heuristic, not formal SHAP.",
+      "The saved models may emit scikit-learn version warnings when loaded in a different environment.",
+      "Predictions are project outputs and not real underwriting or pricing guidance.",
     ],
     githubUrl: "#",
   },
@@ -260,8 +260,8 @@ export const projects: Project[] = [
 
 export const projectStats: Metric[] = [
   { label: "Featured systems", value: "3", detail: "agent, reasoning, prediction" },
-  { label: "Demo mode", value: "static", detail: "browser-only traces" },
-  { label: "API calls", value: "0", detail: "first version is local" },
+  { label: "Backend", value: "FastAPI", detail: "wraps original project code" },
+  { label: "Demo data", value: "real", detail: "models or original artifacts" },
 ];
 
 export function getProjectBySlug(slug: string) {

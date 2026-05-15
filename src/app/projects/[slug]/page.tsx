@@ -3,12 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ExternalLink, Play } from "lucide-react";
 
-import { DemoRunner } from "@/components/DemoRunner";
-import { InsurancePredictor } from "@/components/InsurancePredictor";
+import { BackendRunner } from "@/components/BackendRunner";
 import { MetricCard } from "@/components/MetricCard";
-import { PipelineViewer } from "@/components/PipelineViewer";
 import { ToolCard } from "@/components/ToolCard";
-import { demoTraces } from "@/data/demo-traces";
 import { getProjectBySlug, projects } from "@/data/projects";
 
 type ProjectDetailPageProps = {
@@ -50,9 +47,6 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   if (!project) {
     notFound();
   }
-
-  const trace = demoTraces[project.demoKey];
-  const isInsurance = project.demoKey === "insurance";
 
   return (
     <main>
@@ -130,22 +124,35 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-5 py-16 sm:px-6 lg:px-8">
-        <DemoRunner
-          trace={trace}
-          resultSlot={isInsurance ? <InsurancePredictor /> : undefined}
-        />
+        <BackendRunner project={project} />
       </section>
 
       <section className="mx-auto grid w-full max-w-7xl gap-10 px-5 py-16 sm:px-6 lg:px-8">
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-violet-200/70">
-            pipeline flow
+            architecture flow
           </p>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white">
-            Model and agent steps
+            Agent and model flow
           </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-zinc-400">
+            The live pipeline trace appears in the backend runner after execution.
+            This section shows the original project components that the backend wraps.
+          </p>
         </div>
-        <PipelineViewer steps={trace.steps} />
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          {project.tools.map((tool, index) => (
+            <div key={tool.name} className="relative">
+              <div className="mb-3 flex items-center gap-3">
+                <span className="grid size-8 place-items-center rounded-lg border border-violet-300/20 bg-violet-400/[0.08] font-mono text-xs text-violet-200">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="h-px flex-1 bg-gradient-to-r from-violet-300/40 to-transparent" />
+              </div>
+              <ToolCard tool={tool} />
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="border-y border-white/[0.08] bg-[#0B0D17]/55">

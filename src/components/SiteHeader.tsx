@@ -57,7 +57,7 @@ export function SiteHeader() {
         <div className="hidden items-center gap-3 md:flex">
           <span className="inline-flex items-center gap-2 rounded-full border border-emerald-300/20 bg-emerald-400/[0.08] px-3 py-1.5 font-mono text-xs text-emerald-200">
             <span className="size-1.5 rounded-full bg-emerald-300" />
-            static demos
+            backend wrapped
           </span>
           <Link
             href="/projects"
