@@ -7,3 +7,7 @@
 [submodule "original_projects/Insurance-Cost-Predictor"]
 	path = original_projects/Insurance-Cost-Predictor
 	url = https://github.com/yinruide/Insurance-Cost-Predictor.git
+[submodule "original_projects/NBA-Roster-Upgrade-Agent-Webapp"]
+	path = original_projects/NBA-Roster-Upgrade-Agent-Webapp
+	url = https://github.com/Sherlockmrz/NBA-Roster-Upgrade-Agent-Webapp.git
+	branch = v2-webapp-agent
