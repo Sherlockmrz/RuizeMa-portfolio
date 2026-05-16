@@ -8,11 +8,34 @@ from pydantic import BaseModel, Field
 class NBARequest(BaseModel):
     query: str = Field(
         default=(
-            "Recommend top 5 players for the Warriors to improve interior defense "
-            "using the last 10 games. Only include players with at least 20 games "
-            "and 18 average minutes."
+            "Recommend the top 5 players for the Golden State Warriors to improve "
+            "interior defense over the last 10 games. Only include players with at "
+            "least 15 games and 15 average minutes. Check whether the ranking is "
+            "robust, and keep a grounded Q&A section for follow-up questions."
         )
     )
+    use_llm: bool = False
+    filters: dict[str, Any] = Field(default_factory=dict)
+    run_evaluation: bool = False
+    grounded_question: str | None = None
+    use_sidebar_as_manual_override: bool = False
+    run_tool_benchmark: bool = False
+
+
+class NBAQARequest(BaseModel):
+    question: str = Field(default="")
+    use_llm: bool = False
+    latest: bool = True
+    agent_result: dict[str, Any] | None = None
+
+
+class NBAEvaluateRequest(BaseModel):
+    query: str | None = None
+    use_llm: bool = False
+    filters: dict[str, Any] = Field(default_factory=dict)
+    use_sidebar_as_manual_override: bool = False
+    run_tool_benchmark: bool = True
+    agent_result: dict[str, Any] | None = None
 
 
 class BiomedicalRequest(BaseModel):

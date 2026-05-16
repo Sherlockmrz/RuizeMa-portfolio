@@ -1,12 +1,21 @@
 from __future__ import annotations
 
+from typing import Any
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.schemas import BiomedicalRequest, InsuranceRequest, NBARequest, ServiceResponse
+from backend.schemas import (
+    BiomedicalRequest,
+    InsuranceRequest,
+    NBAEvaluateRequest,
+    NBAQARequest,
+    NBARequest,
+    ServiceResponse,
+)
 from backend.services.biomedical_service import run_biomedical
 from backend.services.insurance_service import predict_insurance
-from backend.services.nba_service import run_nba
+from backend.services.nba_service import evaluate_nba, run_nba, run_nba_qa
 
 app = FastAPI(
     title="Ruize Lab Backend",
@@ -44,9 +53,19 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.post("/api/nba/run", response_model=ServiceResponse)
-def nba_run(request: NBARequest) -> ServiceResponse:
-    return ServiceResponse(**run_nba(request.query))
+@app.post("/api/nba/run")
+def nba_run(request: NBARequest) -> dict[str, Any]:
+    return run_nba(request.model_dump())
+
+
+@app.post("/api/nba/qa")
+def nba_qa(request: NBAQARequest) -> dict[str, Any]:
+    return run_nba_qa(request.model_dump())
+
+
+@app.post("/api/nba/evaluate")
+def nba_evaluate(request: NBAEvaluateRequest) -> dict[str, Any]:
+    return evaluate_nba(request.model_dump())
 
 
 @app.post("/api/biomedical/run", response_model=ServiceResponse)

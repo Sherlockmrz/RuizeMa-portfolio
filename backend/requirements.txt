@@ -8,3 +8,5 @@ streamlit>=1.37
 openai>=1.0
 jsonlines>=4.0
 matplotlib
+python-dotenv>=1.0.1
+requests>=2.32.0

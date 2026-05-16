@@ -76,16 +76,16 @@ export const projects: Project[] = [
     shortTitle: "Roster Upgrade Agent",
     category: "AI Agent System",
     description:
-      "An LLM-driven roster recommendation and scouting workflow built around team need diagnosis, player strength vectors, and fit ranking.",
+      "A full WebApp-wrapped roster recommendation agent with query parsing, agentic tool selection, need reasoning, fit ranking, sensitivity checks, grounded Q&A, and evaluation.",
     overview:
-      "The backend wraps the original Colab-style NBA project. When the required NBA CSV files are available through NBA_DATA_PATH, it recomputes the original Tool A, Tool B, and Tool C pipeline. Without those CSVs, it displays the captured original notebook output for the published Warriors demo query.",
-    role: "Original project authoring and portfolio integration: exposed parsing, need diagnosis, player vectors, fit ranking, and scouting-summary outputs through a structured backend response.",
+      "The backend imports the original NBA-Roster-Upgrade-Agent-Webapp package from the v2-webapp-agent branch. It calls the original parser, roster agent, agentic tool selector, need reasoning, player-strength builder, fit ranker, sensitivity checker, grounded Q&A, zero-shot evaluator, benchmark helpers, and radar renderer without importing Streamlit.",
+    role: "Original project authoring and portfolio integration: replaced the simplified portfolio wrapper with a FastAPI bridge around the WebApp computation modules and a Next.js agent console.",
     demoKey: "nba",
     tags: ["LLM parsing", "Sports analytics", "Fit ranking"],
     metrics: [
-      { label: "Original tools", value: "A-C", detail: "need, strength, ranking" },
-      { label: "Recorded pool", value: "236", detail: "eligible players in notebook" },
-      { label: "Mode", value: "CSV-gated", detail: "live with NBA_DATA_PATH" },
+      { label: "Pipeline nodes", value: "11", detail: "WebApp registry" },
+      { label: "Eval metrics", value: "7", detail: "zero-shot vs tools" },
+      { label: "Backend", value: "FastAPI", detail: "imports nba_agent" },
     ],
     tools: [
       {
@@ -95,6 +95,14 @@ export const projects: Project[] = [
           "Converts the natural-language roster request into team, goal, top-k, recent-game window, and availability filters.",
         signal: "query JSON",
         accent: "purple",
+      },
+      {
+        name: "Agentic Tool Selection",
+        type: "planner",
+        description:
+          "Selects visible workflow sections, validates dependencies, records skipped tools, rationales, and fallback state.",
+        signal: "tool plan",
+        accent: "indigo",
       },
       {
         name: "Tool A: Team Need Diagnosis",
@@ -113,22 +121,22 @@ export const projects: Project[] = [
         accent: "indigo",
       },
       {
-        name: "Tool C: Fit Ranking",
+        name: "Tool C + Sensitivity",
         type: "ranker",
         description:
-          "Matches team need weights against player strengths to produce top recommendations and best-match labels.",
-        signal: "fit score",
+          "Ranks players by fit score, generates recommendation cards, and checks stability under need-weight perturbation.",
+        signal: "fit + robustness",
         accent: "green",
       },
     ],
     exampleInput:
       "Recommend top 5 players for the Warriors to improve interior defense using the last 10 games. Only include players with at least 20 games and 18 average minutes.",
     finalResult:
-      "The original notebook demo recommends Anthony Davis, Rudy Gobert, O.G. Anunoby, Nikola Jokic, and Joel Embiid as the top statistical fits for the Warriors interior-defense request.",
+      "The FastAPI wrapper returns the original WebApp AgentResult structure: parsed query, selected/skipped tools, Tool A/B/C tables, sensitivity output, scouting summary, grounded Q&A, zero-shot comparison metrics, benchmark rows, and radar SVGs.",
     limitations: [
-      "The original repo does not include the required NBA CSV files; live recomputation requires NBA_DATA_PATH.",
+      "Live recomputation requires teams.csv, games.csv, and games_details.csv at NBA_DATA_PATH or in the bundled WebApp data/raw folder.",
       "The original ranking does not include salary, age, trade feasibility, or cap constraints.",
-      "The original project notes superstar bias in the statistical ranking.",
+      "Zero-shot comparison and LLM-selected tools require OpenRouter credentials; deterministic fallbacks are reported when unavailable.",
     ],
     githubUrl: "#",
   },

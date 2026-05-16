@@ -5,6 +5,7 @@ import { AlertTriangle, Database, Loader2, Play, Server } from "lucide-react";
 
 import type { PipelineStep, Project } from "@/data/projects";
 import { cn } from "@/lib/utils";
+import { NbaAgentConsole } from "./NbaAgentConsole";
 import { PipelineViewer } from "./PipelineViewer";
 
 type ServiceResponse = {
@@ -121,6 +122,14 @@ type BackendRunnerProps = {
 };
 
 export function BackendRunner({ project }: BackendRunnerProps) {
+  if (project.demoKey === "nba") {
+    return <NbaAgentConsole project={project} />;
+  }
+
+  return <GenericBackendRunner project={project} />;
+}
+
+function GenericBackendRunner({ project }: BackendRunnerProps) {
   const [response, setResponse] = useState<ServiceResponse | null>(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
