@@ -7,3 +7,4 @@ joblib>=1.4
 streamlit>=1.37
 openai>=1.0
 jsonlines>=4.0
+matplotlib
