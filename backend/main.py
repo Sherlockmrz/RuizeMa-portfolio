@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import traceback
 from typing import Any
 
 from fastapi import FastAPI
@@ -54,8 +55,55 @@ def health() -> dict[str, str]:
 
 
 @app.post("/api/nba/run")
-def nba_run(request: NBARequest) -> dict[str, Any]:
-    return run_nba(request.model_dump())
+def nba_run(request: NBARequest) -> dict[str, Any] | ServiceResponse:
+    print("[api/nba/run] request entered endpoint", flush=True)
+    payload = request.model_dump()
+    print(f"[api/nba/run] request payload: {payload!r}", flush=True)
+
+    try:
+        print("[api/nba/run] before calling run_nba", flush=True)
+        response = run_nba(payload)
+        print(
+            "[api/nba/run] run_nba succeeded "
+            f"ok={response.get('ok')} mode={response.get('mode')}",
+            flush=True,
+        )
+        return response
+    except Exception as exc:
+        error_traceback = traceback.format_exc()
+        print(f"[api/nba/run] run_nba failed: {exc!r}", flush=True)
+        print(f"[api/nba/run] exception traceback:\n{error_traceback}", flush=True)
+        return ServiceResponse(
+            ok=False,
+            mode="error",
+            project="NBA Roster Upgrade Agent",
+            input=payload,
+            trace=[
+                {
+                    "id": "nba-endpoint-error",
+                    "title": "NBA endpoint error",
+                    "status": "error",
+                    "tool": "backend.main.nba_run",
+                    "input": repr(payload),
+                    "output": str(exc),
+                    "explanation": (
+                        "The FastAPI endpoint caught an exception while calling "
+                        "run_nba and returned a structured error response."
+                    ),
+                }
+            ],
+            result={
+                "error": str(exc),
+                "error_type": type(exc).__name__,
+            },
+            limitations=[
+                "The NBA backend failed before returning a complete AgentResult payload."
+            ],
+            provenance={
+                "source": "backend.main.nba_run",
+                "wrapped_service": "backend.services.nba_service.run_nba",
+            },
+        )
 
 
 @app.post("/api/nba/qa")
