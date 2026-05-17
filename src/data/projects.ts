@@ -73,10 +73,10 @@ export const projects: Project[] = [
   {
     slug: "nba-roster-upgrade-agent",
     title: "NBA Roster Upgrade Agent",
-    shortTitle: "Roster Upgrade Agent",
+    shortTitle: "NBA Roster Upgrade Agent",
     category: "AI Agent System",
     description:
-      "A full WebApp-wrapped roster recommendation agent with query parsing, agentic tool selection, need reasoning, fit ranking, sensitivity checks, grounded Q&A, and evaluation.",
+      "An LLM-driven NBA player recommendation and scouting workflow built around team need diagnosis, player strength vectors, fit ranking, robustness checks, and grounded Q&A.",
     overview:
       "The backend imports the original NBA-Roster-Upgrade-Agent-Webapp package from the v2-webapp-agent branch. It calls the original parser, roster agent, agentic tool selector, need reasoning, player-strength builder, fit ranker, sensitivity checker, grounded Q&A, zero-shot evaluator, benchmark helpers, and radar renderer without importing Streamlit.",
     role: "Original project authoring and portfolio integration: replaced the simplified portfolio wrapper with a FastAPI bridge around the WebApp computation modules and a Next.js agent console.",
@@ -142,11 +142,11 @@ export const projects: Project[] = [
   },
   {
     slug: "plan-act-verify-biomedical-reasoning",
-    title: "Plan-Act-Verify Biomedical Reasoning",
-    shortTitle: "Biomedical Reasoning",
+    title: "Plan–Act–Verify Biomedical Reasoning",
+    shortTitle: "Plan–Act–Verify Biomedical Reasoning",
     category: "Reasoning System",
     description:
-      "A CURE-Bench Plan-Act-Verify system that uses a model planner, biomedical tools, curated Tool Facts, and a final answer pass.",
+      "An agentic biomedical QA system that answers medical reasoning problems through planning, evidence retrieval, Tool Facts, verification, and final answer synthesis.",
     overview:
       "The backend wraps the original biomedical pipeline when OpenRouter and ToolUniverse are available. In local recorded mode, it displays an original submission CSV trace with the real plan, tool calls, Tool Facts, and final answer.",
     role: "Portfolio integration: converted the original benchmark pipeline and submission artifacts into a readable question, plan, tool retrieval, verification, and answer display.",
@@ -205,10 +205,10 @@ export const projects: Project[] = [
   {
     slug: "insurance-cost-predictor",
     title: "Insurance Cost Predictor",
-    shortTitle: "Cost Predictor",
+    shortTitle: "Insurance Cost Predictor",
     category: "Predictive Model",
     description:
-      "A backend-wrapped Streamlit project that loads the original saved model artifacts and returns annual cost predictions with uncertainty and feature drivers.",
+      "A neural-network and machine-learning prediction system that estimates annual insurance costs using original saved model artifacts, uncertainty signals, and feature drivers.",
     overview:
       "The backend imports the original Insurance Cost Predictor Streamlit shared module and calls make_prediction directly. It reuses the saved subgroup Random Forest regressors, smoker classifier path, quantile regression interval, and model comparison metrics.",
     role: "Portfolio integration: replaced the Streamlit UI with a Next.js dashboard while preserving the original inference path and model artifacts.",

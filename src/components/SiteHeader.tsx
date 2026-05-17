@@ -26,10 +26,10 @@ export function SiteHeader() {
           </span>
           <span>
             <span className="block text-sm font-semibold text-white">
-              Ruize Ma Portfolio
+              Ruize Ma
             </span>
             <span className="block font-mono text-[11px] uppercase tracking-[0.16em] text-zinc-500 transition group-hover:text-zinc-400">
-              AI systems
+              AI SYSTEMS LAB
             </span>
           </span>
         </Link>
@@ -63,7 +63,7 @@ export function SiteHeader() {
             href="/projects"
             className="rounded-lg border border-white/[0.1] bg-white/[0.04] px-3 py-2 text-sm font-medium text-zinc-200 transition hover:border-violet-300/30 hover:bg-violet-400/[0.08]"
           >
-            View work
+            View systems
           </Link>
         </div>
 

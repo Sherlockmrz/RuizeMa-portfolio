@@ -39,15 +39,16 @@ export function Hero({ projects, stats }: HeroProps) {
           </div>
 
           <p className="mt-10 font-mono text-sm uppercase tracking-[0.2em] text-violet-200/80">
-            Ruize Ma
+            Data Science & Mathematics @ NYU
           </p>
           <h1 className="mt-4 max-w-4xl text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl">
-            AI Agent Systems Portfolio
+            <span className="block">AI Agent Systems</span>
+            <span className="block">Neural Network Models</span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-300">
-            A polished portfolio for agent workflows, biomedical reasoning, and
-            predictive modeling, presented as calm product-grade system dashboards
-            backed by the original project code and artifacts.
+            Interactive AI systems for agent workflows, biomedical reasoning, NBA
+            roster intelligence, and predictive modeling — built as product-grade
+            dashboards backed by original project code and artifacts.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -55,7 +56,7 @@ export function Hero({ projects, stats }: HeroProps) {
               href="/projects"
               className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-violet-300 px-5 text-sm font-semibold text-[#080A12] transition hover:bg-violet-200"
             >
-              View projects
+              Explore systems
               <ArrowRight className="size-4" />
             </Link>
             <Link
@@ -84,7 +85,7 @@ export function Hero({ projects, stats }: HeroProps) {
               <p className="font-mono text-xs uppercase tracking-[0.18em] text-zinc-500">
                 system overview
               </p>
-              <h2 className="mt-2 text-lg font-semibold text-white">Portfolio console</h2>
+              <h2 className="mt-2 text-lg font-semibold text-white">Systems console</h2>
             </div>
             <span className="rounded-full border border-emerald-300/20 bg-emerald-400/[0.08] px-3 py-1 font-mono text-xs text-emerald-200">
               v1
@@ -107,7 +108,7 @@ export function Hero({ projects, stats }: HeroProps) {
                     </span>
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <h3 className="font-semibold text-white">{project.shortTitle}</h3>
+                        <h3 className="font-semibold text-white">{project.title}</h3>
                         <span className="font-mono text-xs text-zinc-500">
                           {project.category}
                         </span>

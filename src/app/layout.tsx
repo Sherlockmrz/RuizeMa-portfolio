@@ -6,11 +6,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Ruize Ma Portfolio",
-    template: "%s | Ruize Ma Portfolio",
+    default: "Ruize Ma",
+    template: "%s | Ruize Ma",
   },
   description:
-    "A refined AI systems portfolio showcasing agent workflows, biomedical reasoning, and predictive modeling demos by Ruize Ma.",
+    "A refined AI systems lab showcasing agent workflows, biomedical reasoning, NBA roster intelligence, and predictive modeling demos by Ruize Ma.",
 };
 
 export default function RootLayout({
