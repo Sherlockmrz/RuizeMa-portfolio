@@ -138,7 +138,7 @@ export const projects: Project[] = [
       "The original ranking does not include salary, age, trade feasibility, or cap constraints.",
       "Zero-shot comparison and LLM-selected tools require OpenRouter credentials; deterministic fallbacks are reported when unavailable.",
     ],
-    githubUrl: "#",
+    githubUrl: "https://github.com/Sherlockmrz/NBA-Roster-Upgrade-Agent-Webapp",
   },
   {
     slug: "plan-act-verify-biomedical-reasoning",
@@ -200,7 +200,7 @@ export const projects: Project[] = [
       "Recorded mode is an original artifact but does not answer arbitrary new biomedical questions.",
       "This is benchmark reasoning output, not medical advice.",
     ],
-    githubUrl: "#",
+    githubUrl: "https://github.com/Sherlockmrz/Agentic--Biomedical-Reasoning",
   },
   {
     slug: "insurance-cost-predictor",
@@ -262,7 +262,7 @@ export const projects: Project[] = [
       "The saved models may emit scikit-learn version warnings when loaded in a different environment.",
       "Predictions are project outputs and not real underwriting or pricing guidance.",
     ],
-    githubUrl: "#",
+    githubUrl: "https://github.com/yinruide/Insurance-Cost-Predictor",
   },
 ];
 

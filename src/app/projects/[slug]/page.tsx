@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink, Play } from "lucide-react";
+import { ArrowLeft, Award, ExternalLink, FileText, Play, Video } from "lucide-react";
 
 import { BackendRunner } from "@/components/BackendRunner";
 import { MetricCard } from "@/components/MetricCard";
@@ -71,6 +71,46 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
               {project.description}
             </p>
 
+            {project.slug === "plan-act-verify-biomedical-reasoning" ? (
+              <div className="mt-6 rounded-2xl border border-violet-300/20 bg-violet-400/[0.07] p-4 shadow-[0_18px_70px_rgba(0,0,0,0.24)] backdrop-blur">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="grid size-10 place-items-center rounded-lg border border-violet-300/20 bg-violet-300/[0.12] text-violet-100">
+                      <Award className="size-5" />
+                    </span>
+                    <div>
+                      <p className="font-mono text-xs uppercase tracking-[0.18em] text-violet-200/70">
+                        project credential
+                      </p>
+                      <p className="mt-1 font-semibold text-white">
+                        First Author, MIDI 2025
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2 sm:flex-row">
+                    <a
+                      href="https://midi2025.opi.org.pl/wp-content/uploads/2025/12/Plan-Act-Verify-An-Agentic-AI-Question-Answering-and-Reasoning-System-Evaluated-on-the-CURE-Bench-Challenge.pdf"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.04] px-3 text-sm font-semibold text-zinc-100 transition hover:border-violet-300/30 hover:bg-white/[0.07]"
+                    >
+                      <FileText className="size-4" />
+                      Abstract PDF
+                    </a>
+                    <a
+                      href="https://midi2025.opi.org.pl/vr-venue/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.04] px-3 text-sm font-semibold text-zinc-100 transition hover:border-cyan-300/30 hover:bg-cyan-400/[0.07]"
+                    >
+                      <Video className="size-4" />
+                      MIDI 2025 Venue
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="#demo"
@@ -91,7 +131,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                   rel="noreferrer"
                   className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.04] px-5 text-sm font-semibold text-zinc-100 transition hover:border-violet-300/30 hover:bg-white/[0.07]"
                 >
-                  GitHub
+                  Original GitHub
                   <ExternalLink className="size-3.5" />
                 </a>
               )}

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight, GitBranch, Play } from "lucide-react";
 
 import type { Project } from "@/data/projects";
 
@@ -72,6 +72,17 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <Play className="size-4" />
           Run demo
         </Link>
+        {project.githubUrl !== "#" ? (
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-violet-300/20 bg-violet-400/[0.07] px-4 text-sm font-semibold text-violet-100 transition hover:border-violet-300/35 hover:bg-violet-400/[0.12]"
+          >
+            <GitBranch className="size-4" />
+            GitHub
+          </a>
+        ) : null}
       </div>
     </motion.article>
   );

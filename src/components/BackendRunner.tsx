@@ -225,8 +225,9 @@ function GenericBackendRunner({ project }: BackendRunnerProps) {
           {response ? <ResultHeader response={response} /> : null}
           {error ? <ErrorPanel message={error} /> : null}
           {!response && !error ? <EmptyResult /> : null}
-          {response?.trace?.length ? <PipelineViewer steps={response.trace} /> : null}
           {response ? <ProjectResult project={project} response={response} /> : null}
+          {response?.trace?.length ? <PipelineViewer steps={response.trace} /> : null}
+          {response ? <Limitations response={response} /> : null}
         </div>
       </div>
     </section>
@@ -632,6 +633,13 @@ function BiomedicalResult({ response }: { response: ServiceResponse }) {
 
   return (
     <div className="space-y-4">
+      <Panel className="border-violet-300/20 bg-violet-400/[0.06]">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-violet-200/70">
+          final answer
+        </p>
+        <p className="mt-3 text-2xl font-semibold text-white">{result.choice}</p>
+        <p className="mt-2 text-sm leading-6 text-zinc-300">{result.final_answer}</p>
+      </Panel>
       <Panel>
         <p className="font-mono text-xs uppercase tracking-[0.18em] text-zinc-500">
           plan
@@ -658,14 +666,6 @@ function BiomedicalResult({ response }: { response: ServiceResponse }) {
           </div>
         </Panel>
       ) : null}
-      <Panel className="border-violet-300/20 bg-violet-400/[0.06]">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-violet-200/70">
-          final answer
-        </p>
-        <p className="mt-3 text-2xl font-semibold text-white">{result.choice}</p>
-        <p className="mt-2 text-sm leading-6 text-zinc-300">{result.final_answer}</p>
-      </Panel>
-      <Limitations response={response} />
     </div>
   );
 }
@@ -717,7 +717,6 @@ function InsuranceResult({ response }: { response: ServiceResponse }) {
         </p>
         <DataGrid rows={comparison.slice(0, 6)} columns={["model", "r2", "rmse", "mae"]} />
       </Panel>
-      <Limitations response={response} />
     </div>
   );
 }
