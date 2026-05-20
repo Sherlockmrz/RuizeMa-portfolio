@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
+import { FloatingAIAssistant } from "@/components/FloatingAIAssistant";
 import { Hero } from "@/components/Hero";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ToolCard } from "@/components/ToolCard";
@@ -9,6 +10,7 @@ import { projectStats, projects } from "@/data/projects";
 export default function Home() {
   return (
     <main>
+      <FloatingAIAssistant />
       <Hero projects={projects} stats={projectStats} />
 
       <section className="mx-auto w-full max-w-7xl px-5 py-16 sm:px-6 lg:px-8">

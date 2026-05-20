@@ -54,6 +54,31 @@ class InsuranceRequest(BaseModel):
     model_selector: Literal["block2_stratified_rf"] = "block2_stratified_rf"
 
 
+class SiteAgentMessage(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str = ""
+
+
+class SiteAgentRequest(BaseModel):
+    message: str = Field(default="")
+    history: list[SiteAgentMessage] = Field(default_factory=list)
+    mode: str = "site"
+
+
+class SiteAgentSource(BaseModel):
+    title: str
+    url: str
+    type: str
+
+
+class SiteAgentResponse(BaseModel):
+    answer: str
+    intent: str
+    sources: list[SiteAgentSource] = Field(default_factory=list)
+    limitations: list[str] = Field(default_factory=list)
+    suggested_questions: list[str] = Field(default_factory=list)
+
+
 class PipelineStep(BaseModel):
     id: str
     title: str

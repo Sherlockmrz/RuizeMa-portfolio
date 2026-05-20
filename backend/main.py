@@ -13,10 +13,13 @@ from backend.schemas import (
     NBAQARequest,
     NBARequest,
     ServiceResponse,
+    SiteAgentRequest,
+    SiteAgentResponse,
 )
 from backend.services.biomedical_service import run_biomedical
 from backend.services.insurance_service import predict_insurance
 from backend.services.nba_service import evaluate_nba, run_nba, run_nba_qa
+from backend.services.site_agent_service import run_site_agent_chat
 
 app = FastAPI(
     title="Ruize Lab Backend",
@@ -52,6 +55,25 @@ app.add_middleware(
 @app.get("/api/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.post("/api/site-agent/chat", response_model=SiteAgentResponse)
+def site_agent_chat(request: SiteAgentRequest) -> SiteAgentResponse:
+    try:
+        return SiteAgentResponse(**run_site_agent_chat(request.model_dump()))
+    except Exception as exc:
+        print(f"[site-agent] error = {exc!r}", flush=True)
+        print(traceback.format_exc(), flush=True)
+        return SiteAgentResponse(
+            answer="The AI assistant is temporarily unavailable. Please try again soon.",
+            intent="general_question",
+            sources=[],
+            limitations=[str(exc)],
+            suggested_questions=[
+                "Which project should I open first?",
+                "Explain Ruize's view on AI agents.",
+            ],
+        )
 
 
 @app.post("/api/nba/run")
