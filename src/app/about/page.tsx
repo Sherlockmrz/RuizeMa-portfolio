@@ -143,11 +143,12 @@ export default function AboutPage() {
 
               <div className="w-full max-w-[260px] justify-self-start rounded-2xl border border-violet-300/20 bg-violet-400/[0.07] p-3 shadow-[0_18px_70px_rgba(167,139,250,0.12)] sm:justify-self-end">
                 <div className="aspect-square rounded-xl border border-white/[0.1] bg-[radial-gradient(circle_at_top,rgba(167,139,250,0.32),rgba(17,19,31,0.76)_50%,rgba(0,0,0,0.22))] p-3">
-                  <div className="flex h-full flex-col items-center justify-center rounded-lg border border-white/[0.08] bg-black/20 text-center">
-                    <p className="font-mono text-6xl font-semibold text-white">RM</p>
-                    <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.18em] text-violet-200/70">
-                      photo placeholder
-                    </p>
+                  <div className="h-full overflow-hidden rounded-lg border border-white/[0.08] bg-black/20">
+                    <img
+                      src="/images/ruize-profile.jpg"
+                      alt="Ruize Ma profile photo"
+                      className="h-full w-full object-cover"
+                    />
                   </div>
                 </div>
               </div>
