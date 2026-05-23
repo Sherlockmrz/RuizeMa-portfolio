@@ -76,7 +76,6 @@ export function FloatingAIAssistant() {
     },
   ]);
   const [loading, setLoading] = useState(false);
-  const [suggestedQuestions, setSuggestedQuestions] = useState(DEFAULT_PROMPTS);
   const scrollerRef = useRef<HTMLDivElement | null>(null);
 
   const apiBaseUrl = useMemo(getApiBaseUrl, []);
@@ -142,9 +141,6 @@ export function FloatingAIAssistant() {
       };
 
       setMessages([...nextMessages, assistantMessage]);
-      setSuggestedQuestions(
-        data.suggested_questions?.length ? data.suggested_questions : DEFAULT_PROMPTS,
-      );
     } catch {
       setMessages([
         ...nextMessages,
@@ -156,7 +152,6 @@ export function FloatingAIAssistant() {
           suggestedQuestions: DEFAULT_PROMPTS.slice(0, 2),
         },
       ]);
-      setSuggestedQuestions(DEFAULT_PROMPTS);
     } finally {
       setLoading(false);
     }
@@ -168,8 +163,8 @@ export function FloatingAIAssistant() {
   }
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-5 z-50 flex justify-end px-4 sm:bottom-6 sm:px-6 lg:bottom-8 lg:px-8">
-      <div className="pointer-events-auto flex w-full max-w-[420px] flex-col items-end gap-3">
+    <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex justify-end px-4 sm:bottom-6 sm:px-6 lg:px-8">
+      <div className="pointer-events-auto flex w-[min(92vw,380px)] flex-col items-end gap-3 sm:w-[380px]">
         <AnimatePresence>
           {isOpen ? (
             <motion.section
@@ -178,39 +173,37 @@ export function FloatingAIAssistant() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 14, scale: 0.97 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
-              className="w-full overflow-hidden rounded-2xl border border-violet-300/20 bg-[#0B0D17]/[0.92] shadow-[0_24px_90px_rgba(0,0,0,0.5),0_0_70px_rgba(124,58,237,0.18)] backdrop-blur-2xl"
+              style={{ maxHeight: "min(560px, calc(100dvh - 112px))" }}
+              className="sprite-panel flex w-full flex-col overflow-hidden rounded-2xl border backdrop-blur-2xl"
             >
-              <div className="border-b border-white/[0.08] bg-white/[0.035] px-4 py-4">
+              <div className="sprite-panel-bar shrink-0 border-b px-4 py-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex min-w-0 items-start gap-3">
-                    <span className="relative grid size-11 shrink-0 place-items-center rounded-2xl border border-cyan-200/20 bg-[radial-gradient(circle_at_35%_25%,rgba(165,243,252,0.8),rgba(167,139,250,0.32)_42%,rgba(11,13,23,0.92)_80%)] text-cyan-50 shadow-[0_0_34px_rgba(34,211,238,0.25)]">
+                    <span className="sprite-orb relative grid size-11 shrink-0 place-items-center rounded-2xl border">
                       <Bot className="size-5" />
-                      <span className="absolute -right-1 -top-1 size-3 rounded-full border border-[#0B0D17] bg-violet-300 shadow-[0_0_18px_rgba(196,181,253,0.8)]" />
+                      <span className="absolute -right-1 -top-1 size-3 rounded-full border border-[color:var(--surface-elevated)] bg-[var(--accent-secondary)] shadow-[0_0_18px_var(--accent-secondary)]" />
                     </span>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <h2 className="text-sm font-semibold text-white">
+                        <h2 className="text-sm font-semibold text-[var(--text)]">
                           Ruize Lab Sprite
                         </h2>
-                        <span className="rounded-full border border-cyan-300/20 bg-cyan-400/[0.08] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-cyan-100">
+                        <span className="sprite-chip rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em]">
                           RAG
                         </span>
                       </div>
-                      <p className="mt-1 text-xs leading-5 text-zinc-400">
-                        Ask about Ruize, projects, agents, or this website.
-                      </p>
                     </div>
                   </div>
                   <button
                     type="button"
                     onClick={() => setIsOpen(false)}
                     aria-label="Close Ruize Lab Sprite"
-                    className="grid size-8 shrink-0 place-items-center rounded-lg border border-white/[0.08] bg-white/[0.04] text-zinc-400 transition hover:border-violet-300/30 hover:bg-white/[0.08] hover:text-white"
+                    className="sprite-card grid size-8 shrink-0 place-items-center rounded-lg border transition hover:border-[color:var(--accent)]"
                   >
                     <X className="size-4" />
                   </button>
                 </div>
-                <p className="mt-3 rounded-xl border border-white/[0.07] bg-black/20 px-3 py-2 text-xs leading-5 text-zinc-400">
+                <p className="sprite-card sprite-muted mt-3 rounded-xl border px-3 py-2 text-xs leading-5">
                   An attention-aware agent for navigating projects, reasoning
                   systems, and AI ideas.
                 </p>
@@ -218,19 +211,19 @@ export function FloatingAIAssistant() {
 
               <div
                 ref={scrollerRef}
-                className="max-h-[50vh] space-y-3 overflow-y-auto px-4 py-4 sm:max-h-[56vh]"
+                className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4"
               >
                 {messages.map((message) => (
                   <div
                     key={message.id}
                     className={
                       message.role === "user"
-                        ? "ml-8 rounded-2xl border border-violet-300/20 bg-violet-300/[0.12] px-3.5 py-3 text-sm leading-6 text-violet-50"
-                        : "mr-4 rounded-2xl border border-white/[0.08] bg-white/[0.045] px-3.5 py-3 text-sm leading-6 text-zinc-200"
+                        ? "ml-8 rounded-2xl border border-[color:var(--chip-border)] bg-[var(--accent-soft)] px-3.5 py-3 text-sm leading-6 text-[var(--text)]"
+                        : "sprite-card mr-4 rounded-2xl border px-3.5 py-3 text-sm leading-6"
                     }
                   >
                     {message.role === "assistant" ? (
-                      <div className="mb-2 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-violet-200/70">
+                      <div className="mb-2 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--accent)]">
                         <Sparkles className="size-3" />
                         {message.intent ?? "site agent"}
                       </div>
@@ -245,7 +238,7 @@ export function FloatingAIAssistant() {
                             href={source.url}
                             target={sourceIsExternal(source.url) ? "_blank" : undefined}
                             rel={sourceIsExternal(source.url) ? "noreferrer" : undefined}
-                            className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-cyan-300/20 bg-cyan-400/[0.07] px-2.5 py-1 text-[11px] font-medium text-cyan-100 transition hover:border-cyan-200/40 hover:bg-cyan-400/[0.12]"
+                            className="sprite-chip inline-flex max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition hover:border-[color:var(--accent)]"
                           >
                             <span className="truncate">{source.title}</span>
                             {sourceIsExternal(source.url) ? (
@@ -277,7 +270,7 @@ export function FloatingAIAssistant() {
                             type="button"
                             onClick={() => void sendMessage(question)}
                             disabled={loading}
-                            className="rounded-full border border-white/[0.08] bg-black/20 px-2.5 py-1 text-left text-[11px] leading-4 text-zinc-300 transition hover:border-violet-300/30 hover:bg-violet-400/[0.08] disabled:cursor-not-allowed disabled:opacity-60"
+                            className="sprite-chip rounded-full border px-2.5 py-1 text-left text-[11px] leading-4 transition hover:border-[color:var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
                           >
                             {question}
                           </button>
@@ -288,39 +281,26 @@ export function FloatingAIAssistant() {
                 ))}
 
                 {loading ? (
-                  <div className="mr-10 inline-flex items-center gap-2 rounded-2xl border border-white/[0.08] bg-white/[0.045] px-3.5 py-3 text-sm text-zinc-300">
-                    <Loader2 className="size-4 animate-spin text-cyan-200" />
+                  <div className="sprite-card mr-10 inline-flex items-center gap-2 rounded-2xl border px-3.5 py-3 text-sm">
+                    <Loader2 className="size-4 animate-spin text-[var(--accent)]" />
                     Reading site knowledge...
                   </div>
                 ) : null}
               </div>
 
-              <div className="border-t border-white/[0.08] bg-black/20 px-4 py-4">
-                <div className="mb-3 flex flex-wrap gap-2">
-                  {suggestedQuestions.slice(0, 3).map((question) => (
-                    <button
-                      key={question}
-                      type="button"
-                      onClick={() => void sendMessage(question)}
-                      disabled={loading}
-                      className="rounded-full border border-white/[0.08] bg-white/[0.035] px-2.5 py-1 text-left text-[11px] leading-4 text-zinc-400 transition hover:border-cyan-300/25 hover:bg-cyan-400/[0.07] hover:text-cyan-100 disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                      {question}
-                    </button>
-                  ))}
-                </div>
+              <div className="sprite-panel-bar shrink-0 border-t px-4 py-4">
                 <form onSubmit={handleSubmit} className="flex items-center gap-2">
                   <input
                     value={input}
                     onChange={(event) => setInput(event.target.value)}
                     placeholder="Ask about Ruize, projects, or AI agents..."
-                    className="min-w-0 flex-1 rounded-xl border border-white/[0.1] bg-[#0B0D17]/80 px-3 py-2.5 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-violet-300/35 focus:bg-[#10131F]"
+                    className="sprite-input min-w-0 flex-1 rounded-xl border px-3 py-2.5 text-sm outline-none transition focus:border-[color:var(--accent)]"
                   />
                   <button
                     type="submit"
                     disabled={loading || !input.trim()}
                     aria-label="Send message to Ruize Lab Sprite"
-                    className="grid size-10 shrink-0 place-items-center rounded-xl bg-violet-300 text-[#080A12] transition hover:bg-violet-200 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="sprite-primary-button grid size-10 shrink-0 place-items-center rounded-xl transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {loading ? (
                       <Loader2 className="size-4 animate-spin" />
@@ -343,16 +323,16 @@ export function FloatingAIAssistant() {
           transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
           whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.98 }}
-          className="group relative grid size-16 place-items-center rounded-2xl border border-violet-200/25 bg-[#0B0D17]/85 text-white shadow-[0_18px_60px_rgba(0,0,0,0.45),0_0_46px_rgba(34,211,238,0.16)] backdrop-blur-xl transition hover:border-cyan-200/40 hover:shadow-[0_18px_70px_rgba(0,0,0,0.5),0_0_64px_rgba(124,58,237,0.28)]"
+          className="sprite-orb group relative grid size-16 place-items-center rounded-2xl border backdrop-blur-xl transition hover:border-[color:var(--accent-secondary)]"
         >
-          <span className="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_30%_20%,rgba(165,243,252,0.35),transparent_42%),radial-gradient(circle_at_70%_80%,rgba(167,139,250,0.36),transparent_48%)] opacity-90" />
-          <span className="absolute -right-1 -top-1 size-4 rounded-full border border-[#0B0D17] bg-cyan-200 shadow-[0_0_22px_rgba(103,232,249,0.85)]" />
-          <span className="relative grid size-11 place-items-center rounded-xl border border-white/[0.12] bg-white/[0.06]">
+          <span className="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.24),transparent_42%),radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.16),transparent_48%)] opacity-90" />
+          <span className="absolute -right-1 -top-1 size-4 rounded-full border border-[color:var(--surface-elevated)] bg-[var(--accent-secondary)] shadow-[0_0_22px_var(--accent-secondary)]" />
+          <span className="relative grid size-11 place-items-center rounded-xl border border-white/20 bg-white/15">
             {isOpen ? <X className="size-5" /> : <MessageCircle className="size-5" />}
           </span>
-          <span className="pointer-events-none absolute bottom-full right-0 mb-2 hidden w-max max-w-[16rem] rounded-xl border border-white/[0.08] bg-[#0B0D17]/95 px-3 py-2 text-left text-xs leading-5 text-zinc-300 shadow-2xl group-hover:block">
+          <span className="sprite-panel pointer-events-none absolute bottom-full right-0 mb-2 hidden w-max max-w-[16rem] rounded-xl border px-3 py-2 text-left text-xs leading-5 group-hover:block">
             Ruize Lab Sprite
-            <span className="block text-zinc-500">site RAG agent</span>
+            <span className="sprite-muted block">site RAG agent</span>
           </span>
         </motion.button>
       </div>

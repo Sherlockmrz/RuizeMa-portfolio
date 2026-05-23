@@ -1,8 +1,123 @@
 @import "tailwindcss";
 
 :root {
-  --background: #080a12;
-  --foreground: #f8fafc;
+  --bg: #080a12;
+  --bg-soft: #0b0d17;
+  --surface: rgba(17, 19, 31, 0.78);
+  --surface-elevated: rgba(17, 19, 31, 0.92);
+  --text: #f8fafc;
+  --text-muted: #a1a1aa;
+  --text-subtle: #71717a;
+  --border: rgba(255, 255, 255, 0.09);
+  --accent: #a78bfa;
+  --accent-strong: #8b5cf6;
+  --accent-soft: rgba(167, 139, 250, 0.1);
+  --accent-secondary: #67e8f9;
+  --chip-bg: rgba(255, 255, 255, 0.04);
+  --chip-border: rgba(255, 255, 255, 0.09);
+  --button-bg: #c4b5fd;
+  --button-text: #080a12;
+  --input-bg: rgba(0, 0, 0, 0.2);
+  --hero-gradient:
+    radial-gradient(circle at 50% -10%, rgba(167, 139, 250, 0.18), transparent 38%),
+    linear-gradient(180deg, #0b0d17 0%, #080a12 42%, #080a12 100%);
+  --card-shadow: 0 24px 100px rgba(0, 0, 0, 0.28);
+  --sprite-shadow: 0 24px 90px rgba(0, 0, 0, 0.5), 0 0 70px rgba(124, 58, 237, 0.18);
+  --selection-bg: #a78bfa;
+  --selection-text: #080a12;
+  --background: var(--bg);
+  --foreground: var(--text);
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] {
+  --bg: #080a12;
+  --bg-soft: #0b0d17;
+  --surface: rgba(17, 19, 31, 0.78);
+  --surface-elevated: rgba(17, 19, 31, 0.92);
+  --text: #f8fafc;
+  --text-muted: #a1a1aa;
+  --text-subtle: #71717a;
+  --border: rgba(255, 255, 255, 0.09);
+  --accent: #a78bfa;
+  --accent-strong: #8b5cf6;
+  --accent-soft: rgba(167, 139, 250, 0.1);
+  --accent-secondary: #67e8f9;
+  --chip-bg: rgba(255, 255, 255, 0.04);
+  --chip-border: rgba(255, 255, 255, 0.09);
+  --button-bg: #c4b5fd;
+  --button-text: #080a12;
+  --input-bg: rgba(0, 0, 0, 0.2);
+  --hero-gradient:
+    radial-gradient(circle at 50% -10%, rgba(167, 139, 250, 0.18), transparent 38%),
+    linear-gradient(180deg, #0b0d17 0%, #080a12 42%, #080a12 100%);
+  --card-shadow: 0 24px 100px rgba(0, 0, 0, 0.28);
+  --sprite-shadow: 0 24px 90px rgba(0, 0, 0, 0.5), 0 0 70px rgba(124, 58, 237, 0.18);
+  --selection-bg: #a78bfa;
+  --selection-text: #080a12;
+  --background: var(--bg);
+  --foreground: var(--text);
+  color-scheme: dark;
+}
+
+html[data-theme="blue"] {
+  --bg: #f7fbff;
+  --bg-soft: #eef6ff;
+  --surface: rgba(255, 255, 255, 0.9);
+  --surface-elevated: rgba(255, 255, 255, 0.96);
+  --text: #081427;
+  --text-muted: #526276;
+  --text-subtle: #718096;
+  --border: rgba(59, 130, 246, 0.16);
+  --accent: #2563eb;
+  --accent-strong: #1d4ed8;
+  --accent-soft: rgba(37, 99, 235, 0.09);
+  --accent-secondary: #0ea5e9;
+  --chip-bg: rgba(219, 234, 254, 0.78);
+  --chip-border: rgba(37, 99, 235, 0.16);
+  --button-bg: #2563eb;
+  --button-text: #ffffff;
+  --input-bg: rgba(255, 255, 255, 0.86);
+  --hero-gradient:
+    radial-gradient(circle at 80% 8%, rgba(147, 197, 253, 0.24), transparent 34%),
+    linear-gradient(180deg, #ffffff 0%, #f3f8ff 48%, #f7fbff 100%);
+  --card-shadow: 0 24px 70px rgba(30, 64, 175, 0.12), 0 1px 0 rgba(255, 255, 255, 0.7) inset;
+  --sprite-shadow: 0 24px 70px rgba(30, 64, 175, 0.14), 0 0 44px rgba(37, 99, 235, 0.12);
+  --selection-bg: #bfdbfe;
+  --selection-text: #081427;
+  --background: var(--bg);
+  --foreground: var(--text);
+  color-scheme: light;
+}
+
+html[data-theme="purple"] {
+  --bg: #fbf9ff;
+  --bg-soft: #f4efff;
+  --surface: rgba(255, 255, 255, 0.9);
+  --surface-elevated: rgba(255, 255, 255, 0.96);
+  --text: #130f26;
+  --text-muted: #665f78;
+  --text-subtle: #837a95;
+  --border: rgba(124, 58, 237, 0.16);
+  --accent: #7c3aed;
+  --accent-strong: #6d28d9;
+  --accent-soft: rgba(124, 58, 237, 0.1);
+  --accent-secondary: #a78bfa;
+  --chip-bg: rgba(237, 233, 254, 0.78);
+  --chip-border: rgba(124, 58, 237, 0.16);
+  --button-bg: #7c3aed;
+  --button-text: #ffffff;
+  --input-bg: rgba(255, 255, 255, 0.86);
+  --hero-gradient:
+    radial-gradient(circle at 82% 8%, rgba(196, 181, 253, 0.26), transparent 34%),
+    linear-gradient(180deg, #ffffff 0%, #f7f2ff 50%, #fbf9ff 100%);
+  --card-shadow: 0 24px 70px rgba(91, 33, 182, 0.12), 0 1px 0 rgba(255, 255, 255, 0.72) inset;
+  --sprite-shadow: 0 24px 70px rgba(91, 33, 182, 0.14), 0 0 44px rgba(124, 58, 237, 0.12);
+  --selection-bg: #ddd6fe;
+  --selection-text: #130f26;
+  --background: var(--bg);
+  --foreground: var(--text);
+  color-scheme: light;
 }
 
 @theme inline {
@@ -17,10 +132,13 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--text);
   font-family: Inter, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
   overflow-x: hidden;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease;
 }
 
 body::before {
@@ -29,14 +147,12 @@ body::before {
   z-index: -1;
   pointer-events: none;
   content: "";
-  background:
-    radial-gradient(circle at 50% -10%, rgba(167, 139, 250, 0.18), transparent 38%),
-    linear-gradient(180deg, #0b0d17 0%, #080a12 42%, #080a12 100%);
+  background: var(--hero-gradient);
 }
 
 ::selection {
-  color: #080a12;
-  background: #a78bfa;
+  color: var(--selection-text);
+  background: var(--selection-bg);
 }
 
 input,
@@ -44,4 +160,157 @@ button,
 select,
 textarea {
   font: inherit;
+}
+
+.theme-switcher {
+  border-color: var(--border);
+  background: var(--chip-bg);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+}
+
+.theme-switcher-button {
+  color: var(--text-muted);
+}
+
+.theme-switcher-select {
+  color: var(--text-muted);
+}
+
+.theme-switcher-button[data-active="true"] {
+  color: var(--button-text);
+  background: var(--button-bg);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+.sprite-panel {
+  color: var(--text);
+  border-color: var(--border);
+  background: var(--surface-elevated);
+  box-shadow: var(--sprite-shadow);
+}
+
+.sprite-panel-bar {
+  border-color: var(--border);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+}
+
+.sprite-orb {
+  color: var(--button-text);
+  border-color: var(--border);
+  background:
+    radial-gradient(circle at 32% 22%, color-mix(in srgb, var(--accent-secondary) 78%, white 12%), transparent 38%),
+    radial-gradient(circle at 72% 82%, color-mix(in srgb, var(--accent) 64%, transparent), transparent 54%),
+    var(--button-bg);
+  box-shadow: 0 0 36px color-mix(in srgb, var(--accent) 26%, transparent);
+}
+
+.sprite-card {
+  color: var(--text);
+  border-color: var(--border);
+  background: var(--surface);
+}
+
+.sprite-chip {
+  color: var(--accent);
+  border-color: var(--chip-border);
+  background: var(--chip-bg);
+}
+
+.sprite-muted {
+  color: var(--text-muted);
+}
+
+.sprite-input {
+  color: var(--text);
+  border-color: var(--border);
+  background: var(--input-bg);
+}
+
+.sprite-input::placeholder {
+  color: var(--text-subtle);
+}
+
+.sprite-primary-button {
+  color: var(--button-text);
+  background: var(--button-bg);
+}
+
+html:not([data-theme="dark"]) [class*="text-white"],
+html:not([data-theme="dark"]) [class*="text-zinc-100"],
+html:not([data-theme="dark"]) [class*="text-zinc-200"],
+html:not([data-theme="dark"]) [class*="text-zinc-300"] {
+  color: var(--text) !important;
+}
+
+html:not([data-theme="dark"]) [class*="text-zinc-400"],
+html:not([data-theme="dark"]) [class*="text-zinc-500"],
+html:not([data-theme="dark"]) [class*="text-zinc-600"] {
+  color: var(--text-muted) !important;
+}
+
+html:not([data-theme="dark"]) [class*="text-violet"],
+html:not([data-theme="dark"]) [class*="text-cyan"],
+html:not([data-theme="dark"]) [class*="text-indigo"],
+html:not([data-theme="dark"]) [class*="text-emerald"] {
+  color: var(--accent) !important;
+}
+
+html:not([data-theme="dark"]) [class*="text-[#080A12]"] {
+  color: var(--button-text) !important;
+}
+
+html:not([data-theme="dark"]) [class*="bg-[#080A12]"],
+html:not([data-theme="dark"]) [class*="bg-[#0B0D17]"] {
+  background: var(--bg-soft) !important;
+}
+
+html:not([data-theme="dark"]) [class*="bg-[#11131F]"],
+html:not([data-theme="dark"]) [class*="bg-black/"],
+html:not([data-theme="dark"]) [class*="bg-zinc-950"] {
+  background: var(--surface) !important;
+}
+
+html:not([data-theme="dark"]) [class*="bg-white/"] {
+  background: var(--surface-elevated) !important;
+}
+
+html:not([data-theme="dark"]) [class*="bg-violet-300"] {
+  background: var(--button-bg) !important;
+}
+
+html:not([data-theme="dark"]) [class*="bg-violet-400"],
+html:not([data-theme="dark"]) [class*="bg-cyan-400"],
+html:not([data-theme="dark"]) [class*="bg-indigo-400"],
+html:not([data-theme="dark"]) [class*="bg-emerald-400"] {
+  background: var(--accent-soft) !important;
+}
+
+html:not([data-theme="dark"]) [class*="hover:bg-violet-200"]:hover {
+  background: var(--accent-strong) !important;
+}
+
+html:not([data-theme="dark"]) [class*="hover:bg-white"]:hover,
+html:not([data-theme="dark"]) [class*="hover:bg-cyan"]:hover,
+html:not([data-theme="dark"]) [class*="hover:bg-violet-400"]:hover {
+  background: var(--accent-soft) !important;
+}
+
+html:not([data-theme="dark"]) [class*="border-white"],
+html:not([data-theme="dark"]) [class*="border-violet"],
+html:not([data-theme="dark"]) [class*="border-cyan"],
+html:not([data-theme="dark"]) [class*="border-indigo"],
+html:not([data-theme="dark"]) [class*="border-emerald"] {
+  border-color: var(--border) !important;
+}
+
+html:not([data-theme="dark"]) [class*="shadow-"] {
+  box-shadow: var(--card-shadow) !important;
+}
+
+html:not([data-theme="dark"]) input,
+html:not([data-theme="dark"]) textarea,
+html:not([data-theme="dark"]) select {
+  color: var(--text);
+  border-color: var(--border);
+  background: var(--input-bg);
 }

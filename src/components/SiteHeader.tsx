@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -55,6 +56,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
+          <ThemeSwitcher />
           <span className="inline-flex items-center gap-2 rounded-full border border-emerald-300/20 bg-emerald-400/[0.08] px-3 py-1.5 font-mono text-xs text-emerald-200">
             <span className="size-1.5 rounded-full bg-emerald-300" />
             backend wrapped
@@ -67,15 +69,18 @@ export function SiteHeader() {
           </Link>
         </div>
 
-        <button
-          type="button"
-          aria-label={isOpen ? "Close navigation" : "Open navigation"}
-          aria-expanded={isOpen}
-          onClick={() => setIsOpen((value) => !value)}
-          className="grid size-10 place-items-center rounded-lg border border-white/[0.1] bg-white/[0.04] text-zinc-200 md:hidden"
-        >
-          {isOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeSwitcher compact />
+          <button
+            type="button"
+            aria-label={isOpen ? "Close navigation" : "Open navigation"}
+            aria-expanded={isOpen}
+            onClick={() => setIsOpen((value) => !value)}
+            className="grid size-10 place-items-center rounded-lg border border-white/[0.1] bg-white/[0.04] text-zinc-200"
+          >
+            {isOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+          </button>
+        </div>
       </div>
 
       {isOpen ? (
