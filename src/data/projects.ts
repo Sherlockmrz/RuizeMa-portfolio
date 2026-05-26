@@ -1,9 +1,10 @@
 export type ProjectSlug =
   | "nba-roster-upgrade-agent"
   | "plan-act-verify-biomedical-reasoning"
-  | "insurance-cost-predictor";
+  | "insurance-cost-predictor"
+  | "poi-quality-agent";
 
-export type DemoKey = "nba" | "biomedical" | "insurance";
+export type DemoKey = "nba" | "biomedical" | "insurance" | "poi";
 
 export type Accent = "purple" | "indigo" | "cyan" | "green";
 
@@ -264,12 +265,82 @@ export const projects: Project[] = [
     ],
     githubUrl: "https://github.com/yinruide/Insurance-Cost-Predictor",
   },
+  {
+    slug: "poi-quality-agent",
+    title: "POI Quality Agent",
+    shortTitle: "POI Quality Agent",
+    category: "LLM Agent / Map Data Quality",
+    description:
+      "A small LLM-agent style workflow for POI data quality judgment using mock map, merchant, user feedback, and spatial evidence.",
+    overview:
+      "The FastAPI backend loads mock POI cases, routes the task type, retrieves evidence chunks with deterministic top-k scoring, compares multi-source signals, computes spatial consistency, makes a conservative quality decision, and uses OpenRouter/Gemini only to explain the fixed decision.",
+    role: "Portfolio demo: built a map-data quality agent console for address correction, merchant status judgment, duplicate POI detection, evidence retrieval, tool tracing, and explainable manual-review decisions.",
+    demoKey: "poi",
+    tags: ["POI", "LLM Agent", "RAG-style retrieval", "Evidence scoring"],
+    metrics: [
+      { label: "Evidence chunks", value: "10+", detail: "mock multi-source signals" },
+      { label: "Top-K retrieval", value: "5", detail: "ranked evidence" },
+      { label: "Workflow steps", value: "7", detail: "visible tool trace" },
+    ],
+    tools: [
+      {
+        name: "Task Router",
+        type: "planner",
+        description:
+          "Classifies a POI query as address correction, duplicate detection, or merchant status checking.",
+        signal: "task type",
+        accent: "purple",
+      },
+      {
+        name: "Evidence Retriever",
+        type: "retrieval",
+        description:
+          "Ranks mock map, merchant, user feedback, historical, order, photo, and external listing evidence with top-k scoring.",
+        signal: "top-k chunks",
+        accent: "cyan",
+      },
+      {
+        name: "Geo Distance Tool",
+        type: "spatial",
+        description:
+          "Calculates haversine distance or pair distance to judge relocation and duplicate POI consistency.",
+        signal: "meters",
+        accent: "indigo",
+      },
+      {
+        name: "Evidence Comparator",
+        type: "verifier",
+        description:
+          "Groups evidence by support label, highlights conflicts, and keeps risky POI updates in manual review.",
+        signal: "decision groups",
+        accent: "green",
+      },
+      {
+        name: "Gemini Explanation Generator",
+        type: "explainer",
+        description:
+          "Uses OpenRouter/Gemini for a concise Chinese explanation while preserving the deterministic decision.",
+        signal: "explanation",
+        accent: "purple",
+      },
+    ],
+    exampleInput:
+      "判断瑞幸咖啡中关村大街店是否地址正确，是否疑似搬迁",
+    finalResult:
+      "The backend returns original POI records, scored top-k evidence, a seven-step tool trace, grouped evidence comparison, a deterministic quality decision, an optional Gemini explanation, limitations, and provenance.",
+    limitations: [
+      "This demo uses mock POI evidence, not real Didi or production map data.",
+      "The scoring formula is deterministic and transparent, but not a production POI correction model.",
+      "Address replacement, duplicate merge, and merchant status changes are intentionally routed to manual review.",
+    ],
+    githubUrl: "#",
+  },
 ];
 
 export const projectStats: Metric[] = [
-  { label: "Featured systems", value: "3", detail: "agent, reasoning, prediction" },
+  { label: "Featured systems", value: "4", detail: "agent, reasoning, prediction, POI" },
   { label: "Backend", value: "FastAPI", detail: "wraps original project code" },
-  { label: "Demo data", value: "real", detail: "models or original artifacts" },
+  { label: "Demo data", value: "mixed", detail: "artifacts plus POI mock evidence" },
 ];
 
 export function getProjectBySlug(slug: string) {

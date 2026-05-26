@@ -13,10 +13,23 @@ type ServiceResponse = {
   mode: string;
   project: string;
   input: Record<string, unknown>;
-  trace: PipelineStep[];
-  result: Record<string, unknown>;
-  limitations: string[];
-  provenance: Record<string, unknown>;
+  trace?: PipelineStep[];
+  result?: Record<string, unknown>;
+  limitations?: string[];
+  provenance?: Record<string, unknown>;
+  original_record?: Record<string, unknown>;
+  scoring_formula?:
+    | string
+    | {
+        display?: string;
+        weights?: Record<string, number>;
+        subscores?: Record<string, string>;
+      };
+  retrieved_evidence?: Record<string, unknown>[];
+  tool_trace?: unknown[];
+  evidence_comparison?: Record<string, unknown>;
+  decision?: Record<string, unknown>;
+  llm_explanation?: string;
 };
 
 type NbaRecommendation = {
@@ -50,6 +63,35 @@ type InsuranceResultShape = {
   feature_explanation?: Record<string, unknown>[];
   model_comparison?: Record<string, unknown>[];
 };
+
+type POICaseId =
+  | "case_relocation_luckin"
+  | "case_duplicate_starbucks"
+  | "case_status_haidilao";
+
+type POIScenario = {
+  id: POICaseId;
+  label: string;
+  query: string;
+};
+
+const poiScenarios: POIScenario[] = [
+  {
+    id: "case_relocation_luckin",
+    label: "Address Correction / Relocation",
+    query: "判断瑞幸咖啡中关村大街店是否地址正确，是否疑似搬迁",
+  },
+  {
+    id: "case_duplicate_starbucks",
+    label: "Duplicate POI Merge",
+    query: "判断星巴克中关村店和 Starbucks 中关村大街店是否是重复 POI",
+  },
+  {
+    id: "case_status_haidilao",
+    label: "Merchant Status Conflict",
+    query: "判断海底捞某某店是否仍在营业",
+  },
+];
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
@@ -138,12 +180,20 @@ function GenericBackendRunner({ project }: BackendRunnerProps) {
   const [bioChoices, setBioChoices] = useState(biomedicalDefault.choices);
   const [allowLiveBio, setAllowLiveBio] = useState(false);
   const [insurance, setInsurance] = useState<InsuranceForm>(insuranceDefault);
+  const [poiCaseId, setPoiCaseId] = useState<POICaseId>("case_relocation_luckin");
+  const [poiQuery, setPoiQuery] = useState(poiScenarios[0].query);
 
   const endpoint = useMemo(() => {
     if (project.demoKey === "nba") return "/api/nba/run";
     if (project.demoKey === "biomedical") return "/api/biomedical/run";
+    if (project.demoKey === "poi") return "/api/poi/run";
     return "/api/insurance/predict";
   }, [project.demoKey]);
+
+  const selectedPoiScenario = useMemo(
+    () => poiScenarios.find((scenario) => scenario.id === poiCaseId) ?? poiScenarios[0],
+    [poiCaseId],
+  );
 
   async function run() {
     setIsLoading(true);
@@ -155,7 +205,14 @@ function GenericBackendRunner({ project }: BackendRunnerProps) {
           ? { query: nbaQuery }
           : project.demoKey === "biomedical"
             ? { question: bioQuestion, choices: bioChoices, allow_live: allowLiveBio }
-            : insurance;
+            : project.demoKey === "poi"
+              ? {
+                  case_id: poiCaseId,
+                  query: poiQuery,
+                  top_k: 5,
+                  use_llm: true,
+                }
+              : insurance;
       setResponse(await postJson(endpoint, payload));
     } catch (caught) {
       setResponse(null);
@@ -217,6 +274,20 @@ function GenericBackendRunner({ project }: BackendRunnerProps) {
           {project.demoKey === "insurance" ? (
             <InsuranceInput value={insurance} onChange={setInsurance} />
           ) : null}
+          {project.demoKey === "poi" ? (
+            <POIInput
+              selectedCaseId={poiCaseId}
+              selectedScenario={selectedPoiScenario}
+              query={poiQuery}
+              onCaseChange={(caseId) => {
+                const nextScenario =
+                  poiScenarios.find((scenario) => scenario.id === caseId) ?? poiScenarios[0];
+                setPoiCaseId(caseId);
+                setPoiQuery(nextScenario.query);
+              }}
+              onQueryChange={setPoiQuery}
+            />
+          ) : null}
 
           <BackendNotice response={response} error={error} />
         </div>
@@ -226,7 +297,9 @@ function GenericBackendRunner({ project }: BackendRunnerProps) {
           {error ? <ErrorPanel message={error} /> : null}
           {!response && !error ? <EmptyResult /> : null}
           {response ? <ProjectResult project={project} response={response} /> : null}
-          {response?.trace?.length ? <PipelineViewer steps={response.trace} /> : null}
+          {project.demoKey !== "poi" && response?.trace?.length ? (
+            <PipelineViewer steps={response.trace} />
+          ) : null}
           {response ? <Limitations response={response} /> : null}
         </div>
       </div>
@@ -445,6 +518,61 @@ function InsuranceInput({
   );
 }
 
+function POIInput({
+  selectedCaseId,
+  selectedScenario,
+  query,
+  onCaseChange,
+  onQueryChange,
+}: {
+  selectedCaseId: POICaseId;
+  selectedScenario: POIScenario;
+  query: string;
+  onCaseChange: (caseId: POICaseId) => void;
+  onQueryChange: (value: string) => void;
+}) {
+  return (
+    <Panel>
+      <p className="font-mono text-xs uppercase tracking-[0.18em] text-zinc-500">
+        POI scenario
+      </p>
+      <div className="mt-4 grid gap-2">
+        {poiScenarios.map((scenario) => (
+          <button
+            key={scenario.id}
+            type="button"
+            onClick={() => onCaseChange(scenario.id)}
+            className={cn(
+              "rounded-lg border px-3 py-2 text-left text-sm transition",
+              selectedCaseId === scenario.id
+                ? "border-violet-300/30 bg-violet-400/[0.1] text-violet-100"
+                : "border-white/[0.08] bg-black/20 text-zinc-400 hover:text-zinc-200",
+            )}
+          >
+            {scenario.label}
+          </button>
+        ))}
+      </div>
+      <label className="mt-5 grid gap-2">
+        <span className="text-sm text-zinc-300">Current query</span>
+        <textarea
+          value={query}
+          onChange={(event) => onQueryChange(event.target.value)}
+          rows={4}
+          className="w-full resize-none rounded-lg border border-white/[0.1] bg-black/20 p-3 text-sm leading-6 text-zinc-100 outline-none transition focus:border-violet-300/40"
+        />
+      </label>
+      <div className="mt-4 rounded-lg border border-white/[0.08] bg-black/20 p-3">
+        <p className="font-mono text-xs text-zinc-500">Request payload</p>
+        <p className="mt-2 text-sm leading-6 text-zinc-400">
+          <span className="font-mono text-zinc-300">{selectedScenario.id}</span> · top_k
+          5 · OpenRouter/Gemini explanation enabled
+        </p>
+      </div>
+    </Panel>
+  );
+}
+
 function BackendNotice({
   response,
   error,
@@ -555,11 +683,14 @@ function ProjectResult({
   if (project.demoKey === "biomedical") {
     return <BiomedicalResult response={response} />;
   }
+  if (project.demoKey === "poi") {
+    return <POIResult response={response} />;
+  }
   return <InsuranceResult response={response} />;
 }
 
 function NbaResult({ response }: { response: ServiceResponse }) {
-  const result = response.result;
+  const result = response.result ?? {};
   const teamNeeds = asRows(result.team_needs);
   const recommendations = asRows(result.recommendations) as NbaRecommendation[];
   const scoutingSummary =
@@ -624,7 +755,7 @@ function NbaResult({ response }: { response: ServiceResponse }) {
 }
 
 function BiomedicalResult({ response }: { response: ServiceResponse }) {
-  const result = response.result as BiomedicalResultShape;
+  const result = (response.result ?? {}) as BiomedicalResultShape;
   const keywords = Array.isArray(result.plan?.keywords) ? result.plan.keywords : [];
   const factsNeeded = Array.isArray(result.plan?.facts_needed)
     ? result.plan.facts_needed
@@ -671,7 +802,7 @@ function BiomedicalResult({ response }: { response: ServiceResponse }) {
 }
 
 function InsuranceResult({ response }: { response: ServiceResponse }) {
-  const result = response.result as InsuranceResultShape;
+  const result = (response.result ?? {}) as InsuranceResultShape;
   const prediction = result.prediction;
   const features = result.feature_explanation ?? [];
   const comparison = result.model_comparison ?? [];
@@ -718,6 +849,264 @@ function InsuranceResult({ response }: { response: ServiceResponse }) {
         <DataGrid rows={comparison.slice(0, 6)} columns={["model", "r2", "rmse", "mae"]} />
       </Panel>
     </div>
+  );
+}
+
+function POIResult({ response }: { response: ServiceResponse }) {
+  const retrievedEvidence = response.retrieved_evidence ?? [];
+  const evidenceComparison = isRecord(response.evidence_comparison)
+    ? response.evidence_comparison
+    : {};
+  const decision = isRecord(response.decision) ? response.decision : {};
+  const scoringFormula = response.scoring_formula;
+  const formulaDisplay =
+    typeof scoringFormula === "string" ? scoringFormula : scoringFormula?.display ?? "";
+  const subscores =
+    typeof scoringFormula === "object" && scoringFormula ? scoringFormula.subscores ?? {} : {};
+  const toolTrace = (response.tool_trace ?? []).filter(isPipelineStep);
+
+  return (
+    <div className="space-y-4">
+      <Panel>
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-zinc-500">
+          original record
+        </p>
+        <pre className="mt-4 max-h-72 overflow-auto rounded-lg border border-white/[0.08] bg-black/30 p-3 text-xs leading-5 text-zinc-300">
+          {JSON.stringify(response.original_record ?? {}, null, 2)}
+        </pre>
+      </Panel>
+
+      <Panel>
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-zinc-500">
+          scoring formula
+        </p>
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-violet-300/20 bg-violet-400/[0.06] p-4 font-mono text-sm leading-6 text-violet-100">
+          {formulaDisplay}
+        </pre>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          {Object.entries(subscores).map(([key, value]) => (
+            <div key={key} className="rounded-lg border border-white/[0.08] bg-black/20 p-3">
+              <p className="font-mono text-xs text-zinc-500">{key}</p>
+              <p className="mt-1 text-sm text-zinc-300">{value}</p>
+            </div>
+          ))}
+        </div>
+      </Panel>
+
+      {toolTrace.length ? <PipelineViewer steps={toolTrace} /> : null}
+
+      <Panel>
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-zinc-500">
+          retrieved evidence
+        </p>
+        <POIEvidenceTable rows={retrievedEvidence} />
+      </Panel>
+
+      <Panel>
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-zinc-500">
+          multi-source evidence comparison
+        </p>
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          <EvidenceGroup
+            title="Supports old record"
+            rows={asRows(evidenceComparison.supports_old_record)}
+          />
+          <EvidenceGroup
+            title="Supports relocation"
+            rows={asRows(evidenceComparison.supports_relocation)}
+          />
+          <EvidenceGroup
+            title="Supports duplicate"
+            rows={asRows(evidenceComparison.supports_duplicate)}
+          />
+          <EvidenceGroup
+            title="Supports closure"
+            rows={asRows(evidenceComparison.supports_closure)}
+          />
+          <EvidenceGroup
+            title="Conflicting evidence"
+            rows={asRows(evidenceComparison.conflicting_evidence)}
+          />
+          <EvidenceGroup
+            title="Uncertainty"
+            rows={asRows(evidenceComparison.uncertainty)}
+          />
+        </div>
+        <pre className="mt-4 max-h-48 overflow-auto rounded-lg border border-white/[0.08] bg-black/30 p-3 text-xs leading-5 text-zinc-500">
+          {JSON.stringify(
+            {
+              dominant_signal: evidenceComparison.dominant_signal,
+              distance_summary: evidenceComparison.distance_summary,
+              top_sources: evidenceComparison.top_sources,
+            },
+            null,
+            2,
+          )}
+        </pre>
+      </Panel>
+
+      <Panel className="border-violet-300/20 bg-violet-400/[0.06]">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-violet-200/70">
+          final decision
+        </p>
+        <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h3 className="text-2xl font-semibold text-white">
+              {String(decision.label ?? "No decision returned")}
+            </h3>
+            <p className="mt-2 text-sm leading-6 text-zinc-300">
+              Suggested action:{" "}
+              <span className="font-mono text-zinc-100">
+                {String(decision.suggested_action ?? "")}
+              </span>
+            </p>
+            {typeof decision.why_not_auto_update === "string" ? (
+              <p className="mt-3 text-sm leading-6 text-zinc-400">
+                {decision.why_not_auto_update}
+              </p>
+            ) : null}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <span className="rounded-full border border-cyan-300/20 bg-cyan-400/[0.08] px-3 py-1 font-mono text-xs text-cyan-200">
+              confidence {String(decision.confidence ?? "")}
+            </span>
+            <span className="rounded-full border border-amber-300/20 bg-amber-400/[0.08] px-3 py-1 font-mono text-xs text-amber-200">
+              risk {String(decision.risk_level ?? "")}
+            </span>
+          </div>
+        </div>
+        {isRecord(decision.suggested_update) ? (
+          <pre className="mt-4 max-h-40 overflow-auto rounded-lg border border-white/[0.08] bg-black/30 p-3 text-xs leading-5 text-zinc-300">
+            {JSON.stringify(decision.suggested_update, null, 2)}
+          </pre>
+        ) : null}
+      </Panel>
+
+      {response.llm_explanation ? (
+        <TextBlock title="OpenRouter / Gemini explanation" text={response.llm_explanation} />
+      ) : null}
+    </div>
+  );
+}
+
+function POIEvidenceTable({ rows }: { rows: Record<string, unknown>[] }) {
+  const columns = [
+    "rank",
+    "source",
+    "claim",
+    "updated_at",
+    "source_trust",
+    "recency_score",
+    "semantic_match",
+    "spatial_consistency",
+    "final_score",
+    "supports",
+  ];
+
+  if (!rows.length) {
+    return <p className="mt-3 text-sm text-zinc-500">No evidence returned.</p>;
+  }
+
+  return (
+    <div className="mt-4 overflow-x-auto">
+      <table className="w-full min-w-[980px] border-separate border-spacing-0 text-left text-sm">
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th
+                key={column}
+                className="border-b border-white/[0.08] px-3 py-2 font-mono text-xs uppercase tracking-[0.14em] text-zinc-500"
+              >
+                {column.replaceAll("_", " ")}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {columns.map((column) => (
+                <td
+                  key={column}
+                  className="border-b border-white/[0.06] px-3 py-3 align-top text-zinc-300"
+                >
+                  {column === "supports" ? (
+                    <SupportBadge value={String(row[column] ?? "uncertain")} />
+                  ) : column === "claim" ? (
+                    <span className="block max-w-[360px] leading-6">
+                      {String(row[column] ?? "")}
+                    </span>
+                  ) : typeof row[column] === "number" ? (
+                    row[column].toLocaleString(undefined, { maximumFractionDigits: 3 })
+                  ) : (
+                    String(row[column] ?? "")
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function SupportBadge({ value }: { value: string }) {
+  const className =
+    value === "relocation" || value === "duplicate"
+      ? "border-violet-300/20 bg-violet-400/[0.08] text-violet-200"
+      : value === "active"
+        ? "border-emerald-300/20 bg-emerald-400/[0.08] text-emerald-200"
+        : value === "temporary_closed" || value === "closed"
+          ? "border-amber-300/20 bg-amber-400/[0.08] text-amber-200"
+          : value === "old_record"
+            ? "border-cyan-300/20 bg-cyan-400/[0.08] text-cyan-200"
+            : "border-white/[0.1] bg-white/[0.04] text-zinc-300";
+
+  return (
+    <span className={cn("rounded-full border px-2.5 py-1 font-mono text-[11px]", className)}>
+      {value}
+    </span>
+  );
+}
+
+function EvidenceGroup({ title, rows }: { title: string; rows: Record<string, unknown>[] }) {
+  return (
+    <div className="rounded-xl border border-white/[0.08] bg-black/20 p-4">
+      <p className="font-mono text-xs text-zinc-500">{title}</p>
+      {rows.length ? (
+        <div className="mt-3 space-y-2">
+          {rows.slice(0, 3).map((row, index) => (
+            <div key={index} className="rounded-lg border border-white/[0.06] bg-white/[0.03] p-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="font-mono text-xs text-zinc-500">
+                  {String(row.source ?? "")}
+                </span>
+                <SupportBadge value={String(row.supports ?? "uncertain")} />
+              </div>
+              <p className="mt-2 text-xs leading-5 text-zinc-400">
+                {String(row.claim ?? "")}
+              </p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="mt-3 text-sm text-zinc-500">No evidence in this group.</p>
+      )}
+    </div>
+  );
+}
+
+function isPipelineStep(value: unknown): value is PipelineStep {
+  if (!isRecord(value)) return false;
+  return (
+    typeof value.id === "string" &&
+    typeof value.title === "string" &&
+    ["complete", "review", "warning", "error"].includes(String(value.status)) &&
+    typeof value.tool === "string" &&
+    typeof value.input === "string" &&
+    typeof value.output === "string" &&
+    typeof value.explanation === "string"
   );
 }
 
@@ -800,13 +1189,15 @@ function DataGrid({
 }
 
 function Limitations({ response }: { response: ServiceResponse }) {
+  const limitations = response.limitations ?? [];
+
   return (
     <Panel>
       <p className="font-mono text-xs uppercase tracking-[0.18em] text-zinc-500">
         limitations and provenance
       </p>
       <ul className="mt-3 space-y-2 text-sm leading-6 text-zinc-400">
-        {response.limitations.map((item) => (
+        {limitations.map((item) => (
           <li key={item} className="flex gap-2">
             <span className="mt-2 size-1.5 shrink-0 rounded-full bg-violet-300/70" />
             <span>{item}</span>
@@ -814,7 +1205,7 @@ function Limitations({ response }: { response: ServiceResponse }) {
         ))}
       </ul>
       <pre className="mt-4 max-h-48 overflow-auto rounded-lg border border-white/[0.08] bg-black/30 p-3 text-xs leading-5 text-zinc-500">
-        {JSON.stringify(response.provenance, null, 2)}
+        {JSON.stringify(response.provenance ?? {}, null, 2)}
       </pre>
     </Panel>
   );

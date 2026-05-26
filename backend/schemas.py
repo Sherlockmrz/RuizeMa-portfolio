@@ -54,6 +54,13 @@ class InsuranceRequest(BaseModel):
     model_selector: Literal["block2_stratified_rf"] = "block2_stratified_rf"
 
 
+class POIRequest(BaseModel):
+    case_id: str = "case_relocation_luckin"
+    query: str = "判断瑞幸咖啡中关村大街店是否地址正确，是否疑似搬迁"
+    top_k: int = Field(default=5, ge=1, le=10)
+    use_llm: bool = True
+
+
 class SiteAgentMessage(BaseModel):
     role: Literal["user", "assistant"]
     content: str = ""

@@ -1,0 +1,249 @@
+{
+  "cases": [
+    {
+      "case_id": "case_relocation_luckin",
+      "query": "判断瑞幸咖啡中关村大街店是否地址正确，是否疑似搬迁",
+      "original_record": {
+        "name": "瑞幸咖啡 中关村大街店",
+        "address": "北京市海淀区中关村大街 1 号 A 座 1 层",
+        "lat": 39.9831,
+        "lng": 116.3152,
+        "status": "open",
+        "updated_at": "2024-02-10"
+      },
+      "evidence": [
+        {
+          "source": "internal_map",
+          "claim": "内部地图仍记录瑞幸咖啡中关村大街店位于中关村大街 1 号 A 座 1 层，状态为营业。",
+          "updated_at": "2024-02-10",
+          "source_trust": 0.72,
+          "semantic_keywords": ["address", "old_record", "open", "internal_map"],
+          "lat": 39.9831,
+          "lng": 116.3152,
+          "supports": "old_record"
+        },
+        {
+          "source": "merchant_backend",
+          "claim": "商户后台显示该门店最新地址为北京市海淀区中关村大街 19 号新中关购物中心 B1，状态营业。",
+          "updated_at": "2026-05-20",
+          "source_trust": 0.94,
+          "semantic_keywords": ["address", "relocation", "merchant", "open", "new_location"],
+          "lat": 39.983,
+          "lng": 116.3166,
+          "supports": "relocation"
+        },
+        {
+          "source": "user_feedback",
+          "claim": "用户反馈：导航到旧地址没有瑞幸，店员说已经搬到新中关 B1。",
+          "updated_at": "2026-05-21",
+          "source_trust": 0.76,
+          "semantic_keywords": ["address", "relocation", "wrong_location", "user_feedback"],
+          "supports": "relocation"
+        },
+        {
+          "source": "user_feedback",
+          "claim": "用户反馈：中关村大街 1 号旧点位不对，实际门店在新中关购物中心地下一层。",
+          "updated_at": "2026-05-18",
+          "source_trust": 0.74,
+          "semantic_keywords": ["address", "relocation", "wrong_location", "mall"],
+          "supports": "relocation"
+        },
+        {
+          "source": "user_feedback",
+          "claim": "用户反馈：地图导航仍带到老店位置，现场没有门店，应改到新中关 B1。",
+          "updated_at": "2026-05-16",
+          "source_trust": 0.72,
+          "semantic_keywords": ["navigation", "old_record", "relocation", "wrong_location"],
+          "supports": "relocation"
+        },
+        {
+          "source": "nearby_candidate",
+          "claim": "附近候选 POI 为同品牌瑞幸咖啡新中关购物中心 B1 店，距离原点位约 120 米，最近更新为 2026 年。",
+          "updated_at": "2026-05-19",
+          "source_trust": 0.86,
+          "semantic_keywords": ["nearby_candidate", "same_brand", "relocation", "address"],
+          "lat": 39.9828,
+          "lng": 116.3165,
+          "supports": "relocation"
+        },
+        {
+          "source": "historical_record",
+          "claim": "历史记录显示 2024 年初仍使用中关村大街 1 号 A 座地址，记录较旧。",
+          "updated_at": "2024-02-10",
+          "source_trust": 0.62,
+          "semantic_keywords": ["historical_record", "old_record", "address"],
+          "lat": 39.9831,
+          "lng": 116.3152,
+          "supports": "old_record"
+        },
+        {
+          "source": "external_listing",
+          "claim": "外部商户展示页提到瑞幸咖啡位于新中关购物中心 B1 层。",
+          "updated_at": "2026-05-17",
+          "source_trust": 0.8,
+          "semantic_keywords": ["external_listing", "address", "relocation", "mall"],
+          "lat": 39.983,
+          "lng": 116.3166,
+          "supports": "relocation"
+        }
+      ]
+    },
+    {
+      "case_id": "case_duplicate_starbucks",
+      "query": "判断星巴克中关村店和 Starbucks 中关村大街店是否是重复 POI",
+      "original_record": {
+        "poi_a": {
+          "name": "星巴克 中关村店",
+          "address": "北京市海淀区中关村大街 15 号一层",
+          "lat": 39.9832,
+          "lng": 116.3159,
+          "phone": "010-88886666",
+          "category": "coffee_shop",
+          "status": "open",
+          "updated_at": "2025-11-02"
+        },
+        "poi_b": {
+          "name": "Starbucks 中关村大街店",
+          "address": "海淀区中关村大街 15 号 1F 临街商铺",
+          "lat": 39.98331,
+          "lng": 116.31605,
+          "phone": "010-8888-6666",
+          "category": "coffee_shop",
+          "status": "open",
+          "updated_at": "2026-04-28"
+        },
+        "pair_distance_meters": 18
+      },
+      "evidence": [
+        {
+          "source": "internal_map",
+          "claim": "内部地图中同时存在中文名星巴克中关村店和英文名 Starbucks 中关村大街店两个 POI。",
+          "updated_at": "2026-04-28",
+          "source_trust": 0.72,
+          "semantic_keywords": ["duplicate", "same_brand", "internal_map", "poi_pair"],
+          "supports": "uncertain"
+        },
+        {
+          "source": "merchant_backend",
+          "claim": "商户后台显示两个记录绑定同一商户主体，联系电话归一化后均为 01088886666。",
+          "updated_at": "2026-05-12",
+          "source_trust": 0.94,
+          "semantic_keywords": ["duplicate", "same_phone", "same_merchant", "merchant_backend"],
+          "supports": "duplicate"
+        },
+        {
+          "source": "nearby_candidate",
+          "claim": "两条 POI 坐标距离约 18 米，品牌、类目、楼层信息高度一致。",
+          "updated_at": "2026-05-10",
+          "source_trust": 0.88,
+          "semantic_keywords": ["duplicate", "distance", "same_brand", "same_category"],
+          "lat": 39.98331,
+          "lng": 116.31605,
+          "supports": "duplicate"
+        },
+        {
+          "source": "external_listing",
+          "claim": "外部点评页只展示一个 Starbucks 门店，地址与两条 POI 描述语义相同。",
+          "updated_at": "2026-05-08",
+          "source_trust": 0.82,
+          "semantic_keywords": ["duplicate", "external_listing", "same_address", "same_brand"],
+          "supports": "duplicate"
+        },
+        {
+          "source": "user_feedback",
+          "claim": "用户反馈：搜索结果出现两个星巴克入口，实际到店只有一家。",
+          "updated_at": "2026-05-06",
+          "source_trust": 0.7,
+          "semantic_keywords": ["duplicate", "user_feedback", "same_place"],
+          "supports": "duplicate"
+        },
+        {
+          "source": "historical_record",
+          "claim": "历史记录显示中文名记录创建较早，英文名记录可能来自后续批量导入。",
+          "updated_at": "2025-07-14",
+          "source_trust": 0.65,
+          "semantic_keywords": ["historical_record", "duplicate", "imported_record"],
+          "supports": "duplicate"
+        }
+      ]
+    },
+    {
+      "case_id": "case_status_haidilao",
+      "query": "判断海底捞某某店是否仍在营业",
+      "original_record": {
+        "name": "海底捞 某某店",
+        "address": "北京市朝阳区示例路 88 号购物中心 5 层",
+        "lat": 39.9212,
+        "lng": 116.4431,
+        "phone": "010-66668888",
+        "category": "hotpot_restaurant",
+        "status": "open",
+        "updated_at": "2025-12-02"
+      },
+      "evidence": [
+        {
+          "source": "internal_map",
+          "claim": "内部地图当前状态仍为营业，最近一次人工更新在 2025 年底。",
+          "updated_at": "2025-12-02",
+          "source_trust": 0.74,
+          "semantic_keywords": ["status", "open", "internal_map", "active"],
+          "lat": 39.9212,
+          "lng": 116.4431,
+          "supports": "active"
+        },
+        {
+          "source": "merchant_backend",
+          "claim": "商户后台将该门店标记为 temporarily_closed，并备注商场装修影响营业。",
+          "updated_at": "2026-05-18",
+          "source_trust": 0.93,
+          "semantic_keywords": ["status", "temporary_closed", "merchant_backend", "renovation"],
+          "lat": 39.9212,
+          "lng": 116.4431,
+          "supports": "temporary_closed"
+        },
+        {
+          "source": "user_feedback",
+          "claim": "用户反馈：近期到店发现围挡施工，店员称装修暂停营业。",
+          "updated_at": "2026-05-19",
+          "source_trust": 0.76,
+          "semantic_keywords": ["status", "closed", "temporary_closed", "renovation", "user_feedback"],
+          "supports": "temporary_closed"
+        },
+        {
+          "source": "user_feedback",
+          "claim": "用户反馈：最近无法排号，现场提示升级改造中。",
+          "updated_at": "2026-05-14",
+          "source_trust": 0.72,
+          "semantic_keywords": ["status", "temporary_closed", "queue", "renovation"],
+          "supports": "temporary_closed"
+        },
+        {
+          "source": "photo_signal",
+          "claim": "2024 年门头照片显示该海底捞招牌存在，但照片时间较旧。",
+          "updated_at": "2024-09-04",
+          "source_trust": 0.68,
+          "semantic_keywords": ["photo_signal", "active", "old_photo", "status"],
+          "lat": 39.9212,
+          "lng": 116.4431,
+          "supports": "active"
+        },
+        {
+          "source": "order_signal",
+          "claim": "到店排号和团购核销信号近 30 天无活动。",
+          "updated_at": "2026-05-20",
+          "source_trust": 0.88,
+          "semantic_keywords": ["order_signal", "closed", "temporary_closed", "no_recent_activity"],
+          "supports": "temporary_closed"
+        },
+        {
+          "source": "external_listing",
+          "claim": "外部页面显示门店暂不接待堂食，但未标记永久闭店。",
+          "updated_at": "2026-05-16",
+          "source_trust": 0.78,
+          "semantic_keywords": ["external_listing", "temporary_closed", "not_permanent", "status"],
+          "supports": "temporary_closed"
+        }
+      ]
+    }
+  ]
+}

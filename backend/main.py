@@ -12,6 +12,7 @@ from backend.schemas import (
     NBAEvaluateRequest,
     NBAQARequest,
     NBARequest,
+    POIRequest,
     ServiceResponse,
     SiteAgentRequest,
     SiteAgentResponse,
@@ -19,6 +20,7 @@ from backend.schemas import (
 from backend.services.biomedical_service import run_biomedical
 from backend.services.insurance_service import predict_insurance
 from backend.services.nba_service import evaluate_nba, run_nba, run_nba_qa
+from backend.services.poi_service import run_poi_quality_agent
 from backend.services.site_agent_service import run_site_agent_chat
 
 app = FastAPI(
@@ -152,3 +154,8 @@ def biomedical_run(request: BiomedicalRequest) -> ServiceResponse:
 @app.post("/api/insurance/predict", response_model=ServiceResponse)
 def insurance_predict(request: InsuranceRequest) -> ServiceResponse:
     return ServiceResponse(**predict_insurance(request.model_dump()))
+
+
+@app.post("/api/poi/run")
+def poi_run(request: POIRequest) -> dict[str, Any]:
+    return run_poi_quality_agent(request.model_dump())

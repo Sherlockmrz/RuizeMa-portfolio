@@ -21,7 +21,7 @@ export default function ProjectsPage() {
           AI systems, reasoning traces, and model dashboards.
         </h1>
         <p className="mt-5 max-w-3xl text-base leading-8 text-zinc-400">
-          Three portfolio projects share one product-style interface: real backend
+          Four portfolio projects share one product-style interface: real backend
           calls, visible pipeline steps, intermediate outputs, final results, and
           clear limitations.
         </p>

@@ -1,0 +1,15 @@
+def sort1(x,position):
+    dic = {}
+    for i in range(len(numbers)):
+        num1 = numbers[i]
+        num = target - num1
+        if num in dic:
+            x = dic[num]+1
+            position=i+1
+
+            return [x,position]
+        dic[num] = i
+    return 0
+numbers = [3,2,4]
+target=6
+print(sort1(numbers,target))
